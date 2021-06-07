@@ -2,15 +2,21 @@ package generator;
 
 import view.Subject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class WordGenerator extends Subject {
+public class WordGenerator extends Subject implements Iterable<String> {
 
     private final Random random;
     private char[] vowels;
     private char[] consonne;
     private StringBuilder strg;
     private int choice;
+    private ArrayList<String> generatedWords;
+    private int numberOfWords;
 
     public WordGenerator()
     {
@@ -18,10 +24,12 @@ public class WordGenerator extends Subject {
         this.consonne = new char[]{'z','r','t','p','q','s','d','f','g','h','j','k','l','m','w','x','c','v','b','n'};
         this.strg = new StringBuilder();
         this.random = new Random();
+        this.generatedWords = new ArrayList<>();
+        this.numberOfWords = 10;
     }
 
     /**
-     * Generate a word randomly
+     * Generate a word with random letters
      * @param length of the word
      * @return String of the word
      */
@@ -63,7 +71,7 @@ public class WordGenerator extends Subject {
     }
 
     /**
-     * Get the word by the type of the model
+     * Get a random word generate by a model
      * @param model of the word
      * @return String of the generated word
      */
@@ -106,17 +114,45 @@ public class WordGenerator extends Subject {
     /**
      * Detect the model
      * @param model to detect
-     * @return String of the generated word by the correct model
      */
-    public String detectionModel(String model)
+    public void detectionModel(String model)
     {
+        generatedWords.clear();
         if(model.length() == 1)
         {
-            return blindModel(Integer.parseInt(model));
+            for(int i = 0; i < numberOfWords; i++)
+            {
+                generatedWords.add(blindModel(Integer.parseInt(model)));
+            }
         }
         else
         {
-            return dataModel(model);
+            for(int i = 0; i < numberOfWords; i++)
+            {
+                generatedWords.add(dataModel(model));
+            }
         }
+    }
+
+    public void setNumberOfWords(int numberOfWords) {
+        this.numberOfWords = numberOfWords;
+    }
+
+    public boolean modelIsCorrect(String model)
+    {
+        //Add for number
+        String regex = "[a-zà-ÿCV'\\-\\s]+";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(model);
+        return matcher.matches();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return generatedWords.iterator();
+    }
+
+    public int getNumberOfWords() {
+        return numberOfWords;
     }
 }

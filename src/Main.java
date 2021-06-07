@@ -1,5 +1,4 @@
-package sample;
-
+import controller.ControllerMenu;
 import controller.ControllerWordGenerator;
 import generator.WordGenerator;
 import javafx.application.Application;
@@ -13,18 +12,23 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        BorderPane borderPane = new BorderPane();
+        BorderPane root = new BorderPane();
         primaryStage.setTitle("Word Generator");
         WordGenerator wordGenerator = new WordGenerator();
-        for(int x = 0; x < 20; x++)
-        {
-            System.out.println(wordGenerator.detectionModel("hC2VC VCy"));
-        }
-
         ControllerWordGenerator controllerWordGenerator = new ControllerWordGenerator(wordGenerator);
-        //borderPane.getChildren().add(controllerWordGenerator);
-        primaryStage.setScene(new Scene(root, 300, 275));
+        ControllerMenu controllerMenu = new ControllerMenu(wordGenerator);
+
+        FXMLLoader fxml = new FXMLLoader();
+        fxml.setLocation(getClass().getResource("fxml/menu.fxml"));
+        fxml.setControllerFactory(iC -> controllerMenu);
+        root.setTop(fxml.load());
+
+        fxml = new FXMLLoader();
+        fxml.setLocation(getClass().getResource("fxml/wordgenerator.fxml"));
+        fxml.setControllerFactory(iC -> controllerWordGenerator);
+        root.setCenter(fxml.load());
+
+        primaryStage.setScene(new Scene(root, 1000, 800));
         primaryStage.show();
     }
 
