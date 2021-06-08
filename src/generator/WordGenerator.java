@@ -2,6 +2,7 @@ package generator;
 
 import view.Subject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -138,13 +139,22 @@ public class WordGenerator extends Subject implements Iterable<String> {
         this.numberOfWords = numberOfWords;
     }
 
-    public boolean modelIsCorrect(String model)
+    public char modelIsCorrect(String model)
     {
         //Add for number
-        String regex = "[a-zà-ÿCV'\\-\\s]+";
+        for(int i = 0; i < model.length(); i++)
+        {
+            char letter = model.charAt(i);
+            if(letter != 'C' && letter != 'V' && letter != ' ')
+            {
+                return letter;
+            }
+        }
+        return ' ';
+        /*String regex = "[a-zà-ÿCV'\\-\\s]+";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(model);
-        return matcher.matches();
+        return matcher.matches();*/
     }
 
     @Override

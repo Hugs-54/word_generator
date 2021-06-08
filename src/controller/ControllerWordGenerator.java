@@ -3,8 +3,10 @@ package controller;
 import generator.WordGenerator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import view.Observator;
 
 
@@ -16,7 +18,7 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private TextField textFieldNumberOfWords;
     @FXML
-    private Label labelVerifyModel;
+    private Text textVerifyModel;
     @FXML
     private Button buttonGenerate;
 
@@ -48,15 +50,25 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void checkModel()
     {
-        if(wordGenerator.modelIsCorrect(textFieldModel.getText()))
+        char letter = (wordGenerator.modelIsCorrect(textFieldModel.getText()));
+        if(textFieldModel.getText().isEmpty() || textFieldModel.getText().isBlank())
         {
-            labelVerifyModel.setText("Everything is correct.");
+            textVerifyModel.setText("Write a model to begin.");
+            buttonGenerate.setDisable(true);
+            textVerifyModel.setFill(Color.BLACK);
+        }
+        //If the letter is empty, there is no problem
+        else if(letter == ' ')
+        {
+            textVerifyModel.setText("The model is correct.");
             buttonGenerate.setDisable(false);
+            textVerifyModel.setFill(Color.GREEN);
         }
         else
         {
-            labelVerifyModel.setText("Something wrong in the model.");
+            textVerifyModel.setText("This character '"+letter+"' is not allowed in model.");
             buttonGenerate.setDisable(true);
+            textVerifyModel.setFill(Color.RED);
         }
     }
 
