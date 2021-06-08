@@ -58,15 +58,21 @@ public class ControllerWordGenerator implements Observator {
             textVerifyModel.setFill(Color.BLACK);
         }
         //If the letter is empty, there is no problem
-        else if(letter == ' ')
+        else if(letter == ' ' || wordGenerator.isAValidNumber(textFieldModel.getText()))
         {
             textVerifyModel.setText("The model is correct.");
             buttonGenerate.setDisable(false);
             textVerifyModel.setFill(Color.GREEN);
         }
+        else if(letter >= 50 && letter <= 57)
+        {
+            textVerifyModel.setText("The number '"+letter+"' must be followed by a letter.");
+            buttonGenerate.setDisable(true);
+            textVerifyModel.setFill(Color.RED);
+        }
         else
         {
-            textVerifyModel.setText("This character '"+letter+"' is not allowed in model.");
+            textVerifyModel.setText("The character '"+letter+"' is not allowed in the model.");
             buttonGenerate.setDisable(true);
             textVerifyModel.setFill(Color.RED);
         }

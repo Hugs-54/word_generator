@@ -58,17 +58,17 @@ public class WordGenerator extends Subject implements Iterable<String> {
      * Generate a random vowel
      * @return String of the vowel
      */
-    public String addVowel()
+    public char addVowel()
     {
-        return String.valueOf(vowels[random.nextInt(vowels.length)]);
+        return vowels[random.nextInt(vowels.length)];
     }
 
     /**
      * Generate a random consonne
      * @return String of the consonne
      */
-    private String addConsonne() {
-        return String.valueOf(consonne[random.nextInt(consonne.length)]);
+    private char addConsonne() {
+        return consonne[random.nextInt(consonne.length)];
     }
 
     /**
@@ -81,32 +81,36 @@ public class WordGenerator extends Subject implements Iterable<String> {
         strg.delete(0,strg.length());
         for(int i = 0; i < model.length(); i++)
         {
-            if(model.charAt(i) == '2')
+            char letter = model.charAt(i);
+            if(letter >= 50 && letter <= 57)
             {
                 i++;
-                String letter = "";
+                char multipleLetter;
                 if(model.charAt(i) == 'V')
                 {
-                    letter = addVowel();
+                    multipleLetter = addVowel();
                 }
                 else if (model.charAt(i) == 'C')
                 {
-                    letter = addConsonne();
+                    multipleLetter = addConsonne();
                 }
-                strg.append(letter);
-                strg.append(letter);
+                else
+                {
+                    multipleLetter = model.charAt(i);
+                }
+                strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
             }
-            else if(model.charAt(i) == 'V')
+            else if(letter == 'V')
             {
                 strg.append(addVowel());
             }
-            else if(model.charAt(i) == 'C')
+            else if(letter == 'C')
             {
                 strg.append(addConsonne());
             }
             else
             {
-                strg.append(model.charAt(i));
+                strg.append(letter);
             }
         }
         return strg.toString();
@@ -119,7 +123,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
     public void detectionModel(String model)
     {
         generatedWords.clear();
-        if(model.length() == 1)
+        if(isAValidNumber(model))
         {
             for(int i = 0; i < numberOfWords; i++)
             {
@@ -145,7 +149,20 @@ public class WordGenerator extends Subject implements Iterable<String> {
         for(int i = 0; i < model.length(); i++)
         {
             char letter = model.charAt(i);
-            if(letter != 'C' && letter != 'V' && letter != ' ')
+            if(letter >= 50 && letter <= 57)
+            {
+                if(i == model.length()-1)
+                {
+                    return letter;
+                }
+                char nextLetter = model.charAt(i+1);
+                if(nextLetter != 'C' && nextLetter != 'V' && (nextLetter < 97 || nextLetter > 122))
+                {
+                    return letter;
+                }
+                i++;
+            }
+            else if(letter != 'C' && letter != 'V' && letter != ' ' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122))
             {
                 return letter;
             }
@@ -155,6 +172,23 @@ public class WordGenerator extends Subject implements Iterable<String> {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(model);
         return matcher.matches();*/
+    }
+
+    public boolean isAValidNumber(String string)
+    {
+        for (int i = 0; i < string.length(); i++)
+        {
+            char letter = string.charAt(i);
+            if((letter == 48 || letter == 49) && string.length() == 1)
+            {
+                return false;
+            }
+            if(letter < 48|| letter > 57)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
