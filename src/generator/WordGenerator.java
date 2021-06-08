@@ -12,10 +12,9 @@ import java.util.regex.Pattern;
 public class WordGenerator extends Subject implements Iterable<String> {
 
     private final Random random;
-    private char[] vowels;
-    private char[] consonne;
-    private StringBuilder strg;
-    private int choice;
+    private final char[] vowels;
+    private final char[] consonne;
+    private final StringBuilder strg;
     private ArrayList<String> generatedWords;
     private int numberOfWords;
 
@@ -39,7 +38,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         strg.delete(0,strg.length());
         for(int i = 0; i < length; i++)
         {
-            choice = random.nextInt(2);
+            int choice = random.nextInt(2);
             if(choice == 0)
             {
                 choice = random.nextInt(vowels.length);
@@ -139,13 +138,21 @@ public class WordGenerator extends Subject implements Iterable<String> {
         }
     }
 
+    /**
+     * Set the number of words to generate
+     * @param numberOfWords number
+     */
     public void setNumberOfWords(int numberOfWords) {
         this.numberOfWords = numberOfWords;
     }
 
+    /**
+     * Detect if a model is correct
+     * @param model to verify
+     * @return the char that it's not allowed
+     */
     public char modelIsCorrect(String model)
     {
-        //Add for number
         for(int i = 0; i < model.length(); i++)
         {
             char letter = model.charAt(i);
@@ -168,18 +175,19 @@ public class WordGenerator extends Subject implements Iterable<String> {
             }
         }
         return ' ';
-        /*String regex = "[a-zà-ÿCV'\\-\\s]+";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(model);
-        return matcher.matches();*/
     }
 
-    public boolean isAValidNumber(String string)
+    /**
+     * Detect if a model is a number. 1 and 0 not allowed
+     * @param model to verify
+     * @return true it's a number
+     */
+    public boolean isAValidNumber(String model)
     {
-        for (int i = 0; i < string.length(); i++)
+        for (int i = 0; i < model.length(); i++)
         {
-            char letter = string.charAt(i);
-            if((letter == 48 || letter == 49) && string.length() == 1)
+            char letter = model.charAt(i);
+            if((letter == 48 || letter == 49) && model.length() == 1)
             {
                 return false;
             }

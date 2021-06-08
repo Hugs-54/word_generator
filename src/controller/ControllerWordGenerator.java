@@ -1,11 +1,16 @@
 package controller;
 
 import generator.WordGenerator;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import view.Observator;
 
@@ -21,6 +26,13 @@ public class ControllerWordGenerator implements Observator {
     private Text textVerifyModel;
     @FXML
     private Button buttonGenerate;
+    @FXML
+    private ListView<String> listViewGeneratedWords;
+    private ObservableList<String> listGeneratedWords;
+    @FXML
+    private Label labelTooltipHelp;
+    @FXML
+    private Label labelHelp;
 
     public ControllerWordGenerator(WordGenerator wordGenerator)
     {
@@ -29,12 +41,29 @@ public class ControllerWordGenerator implements Observator {
     }
 
     @FXML
+    void initialize()
+    {
+        this.listGeneratedWords = FXCollections.observableArrayList();
+        this.listViewGeneratedWords.setItems(listGeneratedWords);
+
+        ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
+        image.setFitHeight(18);
+        image.setFitWidth(18);
+        this.labelHelp.setGraphic(image);
+        labelTooltipHelp.setText("How to use model :\n- Number : Generate words randomly of a size of Number\n- C : Random consonne\n- V : Random vowel\n- a-z : The exact letter\n- 2C/2V : two successive and identical letter (2 to 9)\n");
+
+    }
+
+    @FXML
     public void generate()
     {
         wordGenerator.detectionModel(textFieldModel.getText());
-        for (String str: wordGenerator) {
-            System.out.println(str);
+        listGeneratedWords.clear();
+        for (String str: wordGenerator)
+        {
+            listGeneratedWords.add(str);
         }
+        //carnet.setAuteur(listeParticipants.getSelectionModel().getSelectedIndices().get(0));
     }
 
     @FXML

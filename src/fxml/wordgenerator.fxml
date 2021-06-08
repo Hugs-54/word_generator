@@ -4,18 +4,21 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
    <children>
       <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="662.0">
         <columnConstraints>
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="300.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="76.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
@@ -23,13 +26,26 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label contentDisplay="CENTER" text="Number of words" />
-            <TextField fx:id="textFieldNumberOfWords" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onKeyReleased="#setNumberOfWords" prefHeight="25.0" prefWidth="35.0" text="10" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
-            <TextField fx:id="textFieldModel" maxWidth="-Infinity" onKeyReleased="#checkModel" prefHeight="25.0" prefWidth="274.0" GridPane.rowIndex="1" />
-            <Button fx:id="buttonGenerate" mnemonicParsing="false" onAction="#generate" text="Generate" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-            <Text fx:id="textVerifyModel" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a model to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Label contentDisplay="CENTER" text="Number of words" GridPane.columnIndex="1" />
+            <TextField fx:id="textFieldNumberOfWords" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onKeyReleased="#setNumberOfWords" prefHeight="25.0" prefWidth="35.0" text="10" GridPane.columnIndex="2" GridPane.halignment="LEFT" />
+            <TextField fx:id="textFieldModel" maxWidth="-Infinity" onKeyReleased="#checkModel" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="buttonGenerate" disable="true" mnemonicParsing="false" onAction="#generate" text="Generate" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+            <Text fx:id="textVerifyModel" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a model to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Label fx:id="labelHelp" text="Help" GridPane.rowIndex="1">
+               <tooltip>
+                  <Tooltip>
+                     <graphic>
+                        <Label fx:id="labelTooltipHelp">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </graphic>
+                  </Tooltip>
+               </tooltip>
+            </Label>
          </children>
       </GridPane>
-      <ListView prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="285.0" prefWidth="529.0" />
    </children>
 </VBox>
