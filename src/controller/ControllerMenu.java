@@ -1,6 +1,7 @@
 package controller;
 
 import generator.WordGenerator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -46,6 +47,12 @@ public class ControllerMenu implements Observator {
         {
             wordGenerator.selectOutuputFile(path);
         }
+    }
+
+    @FXML
+    public void quit()
+    {
+        Platform.exit();
     }
 
     @Override

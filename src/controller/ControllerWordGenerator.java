@@ -1,15 +1,24 @@
 package controller;
 
 import generator.WordGenerator;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 import view.Observator;
+
+import java.util.Optional;
 
 
 public class ControllerWordGenerator implements Observator {
@@ -55,7 +64,7 @@ public class ControllerWordGenerator implements Observator {
         image.setFitHeight(18);
         image.setFitWidth(18);
         this.labelHelp.setGraphic(image);
-        labelTooltipHelp.setText("How to use model :\n- Number : Generate words randomly of a size of Number\n- C : Random consonne\n- V : Random vowel\n- a-z : The exact letter\n- 2C/2V : two successive and identical letter (2 to 9)\n");
+        labelTooltipHelp.setText("How to use model :\n- Number : Generate words randomly to a size of Number\n- C : Random consonne\n- V : Random vowel\n- a-z : The exact letter\n- 2C/2V : two successive and identical letter (2 to 9)\n");
 
     }
 
@@ -64,11 +73,9 @@ public class ControllerWordGenerator implements Observator {
     {
         wordGenerator.detectionModel(textFieldModel.getText());
         listGeneratedWords.clear();
-        for (String str: wordGenerator)
-        {
+        for (String str: wordGenerator) {
             listGeneratedWords.add(str);
         }
-        //carnet.setAuteur(listeParticipants.getSelectionModel().getSelectedIndices().get(0));
     }
 
     @FXML
@@ -128,8 +135,53 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void saveAWord()
     {
-        //Add description
-        wordGenerator.saveAWord(listViewGeneratedWords.getSelectionModel().getSelectedIndices().get(0));
+        Dialog<Pair<String,String>> dialog = new Dialog<>();
+        dialog.setTitle("Saving a word");
+        dialog.setHeaderText("You can write a description and modify your word.");
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        TextField textFieldWord = new TextField(listViewGeneratedWords.getSelectionModel().getSelectedItem());
+        /*HBox hboxWord = new HBox();
+        hboxWord.getChildren().addAll(new Label("Word "),textFieldWord);
+        hboxWord.setAlignment(Pos.CENTER);*/
+
+        TextField textFieldDescription = new TextField();
+        /*HBox hboxDescription = new HBox();
+        hboxDescription.getChildren().addAll(new Label("Description "),textFieldDescription);
+        hboxDescription.setAlignment(Pos.CENTER);*/
+
+        GridPane gridPane = new GridPane();
+        gridPane.setVgap(3);
+        gridPane.add(new Label("Word "),0,0);
+        gridPane.add(textFieldWord,1,0);
+        gridPane.add(new Label("Description  "),0,1);
+        gridPane.add(textFieldDescription,1,1);
+        gridPane.setAlignment(Pos.CENTER);
+
+        dialogPane.setContent(gridPane);
+        Platform.runLater(textFieldWord::requestFocus);
+        dialog.setResultConverter((ButtonType button) -> {
+            if (button == ButtonType.OK) {
+                return new Pair<>(textFieldWord.getText(),textFieldDescription.getText());
+            }
+            return null;
+        });
+        Optional<Pair<String,String>> optionalResult = dialog.showAndWait();
+        optionalResult.ifPresent((pair) -> {
+            String word = pair.getKey();
+            String description = pair.getValue();
+            wordGenerator.saveAWord(word,description);
+        });
+        /*
+        TextInputDialog inputDialog = new TextInputDialog();
+        inputDialog.setTitle("Write a description");
+        inputDialog.setHeaderText("You can write a description for your word.");
+        inputDialog.setContentText("Description :");
+        inputDialog.showAndWait().ifPresent(description ->
+        {
+            wordGenerator.saveAWord(listViewGeneratedWords.getSelectionModel().getSelectedIndices().get(0),description);
+        });*/
     }
 
     @Override

@@ -209,9 +209,9 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return numberOfWords;
     }
 
-    public void saveAWord(int i)
+    public void saveAWord(String word, String description)
     {
-        saveManager.saveAWord(generatedWords.get(i), String.valueOf(i));
+        saveManager.saveAWord(word, description);
     }
 
     public void createFile(File path) throws IOException {
