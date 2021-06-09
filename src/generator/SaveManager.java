@@ -10,7 +10,7 @@ public class SaveManager {
 
     public SaveManager()
     {
-
+        this.outputFile = null;
     }
 
     /**
@@ -58,7 +58,11 @@ public class SaveManager {
     }
 
     public String getCurrentPath() {
-        return outputFile.toString();
+        if(outputFile != null)
+        {
+            return outputFile.toString();
+        }
+        return "";
     }
 
     public boolean hasAPath() {

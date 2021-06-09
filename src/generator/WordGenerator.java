@@ -15,6 +15,9 @@ public class WordGenerator extends Subject implements Iterable<String> {
     private final char[] consonne;
     private final StringBuilder strg;
     private final ArrayList<String> generatedWords;
+    private final ArrayList<Syllable> syllables;
+    private int maxAuthorizeWords;
+    private int maxAuthorizeLetter;
     private int numberOfWords;
     private SaveManager saveManager;
 
@@ -25,8 +28,11 @@ public class WordGenerator extends Subject implements Iterable<String> {
         this.strg = new StringBuilder();
         this.random = new Random();
         this.generatedWords = new ArrayList<>();
+        this.syllables = new ArrayList<>();
         this.numberOfWords = 10;
         this.saveManager = new SaveManager();
+        this.maxAuthorizeWords = 50;
+        this.maxAuthorizeLetter = 50;
     }
 
     /**
@@ -58,7 +64,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
      * Generate a random vowel
      * @return String of the vowel
      */
-    public char addVowel()
+    private char addVowel()
     {
         return vowels[random.nextInt(vowels.length)];
     }
@@ -71,6 +77,14 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return consonne[random.nextInt(consonne.length)];
     }
 
+    private String addRandomSyllable() {
+        return syllables.get(random.nextInt(syllables.size())).toString();}
+
+    public void resetStringBuilder()
+    {
+        strg.delete(0,strg.length());
+    }
+
     /**
      * Get a random word generate by a model
      * @param model of the word
@@ -78,27 +92,36 @@ public class WordGenerator extends Subject implements Iterable<String> {
      */
     public String dataModel(String model)
     {
-        strg.delete(0,strg.length());
+        char multipleLetter;
+        char letter;
+        String syllable;
         for(int i = 0; i < model.length(); i++)
         {
-            char letter = model.charAt(i);
+            letter = model.charAt(i);
             if(letter >= 50 && letter <= 57)
             {
                 i++;
-                char multipleLetter;
                 if(model.charAt(i) == 'V')
                 {
                     multipleLetter = addVowel();
+                    strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                 }
                 else if (model.charAt(i) == 'C')
                 {
                     multipleLetter = addConsonne();
+                    strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+
+                }
+                else if (model.charAt(i) == 'S')
+                {
+                    syllable = dataModel(addRandomSyllable());
+                    strg.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter))-1)));
                 }
                 else
                 {
                     multipleLetter = model.charAt(i);
+                    strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                 }
-                strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
             }
             else if(letter == 'V')
             {
@@ -107,6 +130,10 @@ public class WordGenerator extends Subject implements Iterable<String> {
             else if(letter == 'C')
             {
                 strg.append(addConsonne());
+            }
+            else if(letter == 'S')
+            {
+                dataModel(addRandomSyllable());
             }
             else
             {
@@ -135,6 +162,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
             for(int i = 0; i < numberOfWords; i++)
             {
                 generatedWords.add(dataModel(model));
+                resetStringBuilder();
             }
         }
     }
@@ -164,13 +192,13 @@ public class WordGenerator extends Subject implements Iterable<String> {
                     return letter;
                 }
                 char nextLetter = model.charAt(i+1);
-                if(nextLetter != 'C' && nextLetter != 'V' && (nextLetter < 97 || nextLetter > 122))
+                if(nextLetter != 'C' && nextLetter != 'V' && nextLetter != 'S' && (nextLetter < 97 || nextLetter > 122))
                 {
                     return letter;
                 }
                 i++;
             }
-            else if(letter != 'C' && letter != 'V' && letter != ' ' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122))
+            else if(letter != 'C' && letter != 'V' && letter != 'S' && letter != ' ' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122))
             {
                 return letter;
             }
@@ -185,14 +213,15 @@ public class WordGenerator extends Subject implements Iterable<String> {
      */
     public boolean isAValidNumber(String model)
     {
+        char letter;
         for (int i = 0; i < model.length(); i++)
         {
-            char letter = model.charAt(i);
+            letter = model.charAt(i);
             if((letter == 48 || letter == 49) && model.length() == 1)
             {
                 return false;
             }
-            if(letter < 48|| letter > 57)
+            if(letter < 48 || letter > 57)
             {
                 return false;
             }
@@ -203,6 +232,11 @@ public class WordGenerator extends Subject implements Iterable<String> {
     @Override
     public Iterator<String> iterator() {
         return generatedWords.iterator();
+    }
+
+    public Iterator<Syllable> iteratorSyllables()
+    {
+        return syllables.iterator();
     }
 
     public int getNumberOfWords() {
@@ -231,5 +265,54 @@ public class WordGenerator extends Subject implements Iterable<String> {
 
     public boolean hasAPath() {
         return saveManager.hasAPath();
+    }
+
+
+    public int getMaxAuthorizeWords() {
+        return maxAuthorizeWords;
+    }
+
+    public int getMaxAuthorizeLetter() {
+        return maxAuthorizeLetter;
+    }
+
+    public void setMaxAuthorizeWords(int maxAuthorizeWords) {
+        this.maxAuthorizeWords = maxAuthorizeWords;
+    }
+
+    public void setMaxAuthorizeLetter(int maxAuthorizeLetter) {
+        this.maxAuthorizeLetter = maxAuthorizeLetter;
+        notifyObservators();
+    }
+
+    public boolean stringContainsNumber(String string)
+    {
+        for (int i = 0; i < string.length(); i++) {
+            if(string.charAt(i) >= 48 && string.charAt(i) <= 57)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean syllableHasS(String string)
+    {
+        for (int i = 0; i < string.length(); i++) {
+            if(string.charAt(i) == 'S')
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addSyllable(String sy)
+    {
+        syllables.add(new Syllable(sy));
+    }
+
+    public void deleteSyllable(int i) {
+        syllables.remove(i);
     }
 }

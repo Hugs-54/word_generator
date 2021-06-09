@@ -6,70 +6,128 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
+
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
    <children>
-      <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="662.0">
-        <columnConstraints>
-          <ColumnConstraints />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="76.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="600.0" spacing="5.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Number of words" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-               <GridPane.margin>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create words">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Separator prefHeight="0.0" prefWidth="102.0" />
+            <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="662.0" vgap="5.0">
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="76.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Number of words" />
+                        <TextField fx:id="textFieldNumberOfWords" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onKeyReleased="#setNumberOfWords" prefHeight="25.0" prefWidth="35.0" text="10">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <TextField fx:id="textFieldModel" maxWidth="-Infinity" onKeyReleased="#checkModel" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </TextField>
+                  <Button fx:id="buttonGenerate" disable="true" mnemonicParsing="false" onAction="#generateModel" text="Generate" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                  <Text fx:id="textVerifyModel" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a model to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <Label fx:id="labelHelp" text="Help" GridPane.rowIndex="1">
+                     <tooltip>
+                        <Tooltip fx:id="tooltipHelp">
+                           <graphic>
+                              <Label fx:id="labelTooltipHelp">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </graphic>
+                        </Tooltip>
+                     </tooltip>
+                  </Label>
+               </children>
+               <VBox.margin>
                   <Insets />
-               </GridPane.margin></Label>
-            <TextField fx:id="textFieldNumberOfWords" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onKeyReleased="#setNumberOfWords" prefHeight="25.0" prefWidth="35.0" text="10" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-               <GridPane.margin>
-                  <Insets right="25.0" />
-               </GridPane.margin></TextField>
-            <TextField fx:id="textFieldModel" maxWidth="-Infinity" onKeyReleased="#checkModel" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin></TextField>
-            <Button fx:id="buttonGenerate" disable="true" mnemonicParsing="false" onAction="#generate" text="Generate" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-            <Text fx:id="textVerifyModel" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a model to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-            <Label fx:id="labelHelp" text="Help" GridPane.rowIndex="1">
-               <tooltip>
-                  <Tooltip>
-                     <graphic>
-                        <Label fx:id="labelTooltipHelp">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </graphic>
-                  </Tooltip>
-               </tooltip>
-            </Label>
+               </VBox.margin>
+            </GridPane>
+            <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isAWordSelected" prefHeight="560.0" prefWidth="539.0">
+               <contextMenu>
+                  <ContextMenu>
+                     <items>
+                        <MenuItem fx:id="menuItemUseAsModel" mnemonicParsing="false" onAction="#useAWordAsModel" text="Use as model" />
+                        <MenuItem fx:id="menuItemSaveWord" mnemonicParsing="false" onAction="#saveAWord" text="Save the word" />
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </ListView>
+            <Label fx:id="labelCurrentPathFile" text="Current path file : " />
          </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </GridPane>
-      <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isAWordSelected" prefHeight="560.0" prefWidth="539.0">
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem fx:id="menuItemUseAsModel" mnemonicParsing="false" onAction="#useAWordAsModel" text="Use as model" />
-                  <MenuItem fx:id="menuItemSaveWord" mnemonicParsing="false" onAction="#saveAWord" text="Save the word" />
-              </items>
-            </ContextMenu>
-         </contextMenu></ListView>
-      <Label fx:id="labelCurrentPathFile" text="Current path file : " />
+      </VBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="490.0" spacing="10.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create syllables">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Separator prefHeight="0.0" prefWidth="102.0" />
+            <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="662.0">
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="76.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="textFieldSyllable" maxWidth="-Infinity" onKeyReleased="#checkSyllable" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </TextField>
+                  <Button fx:id="buttonCreateSyllable" disable="true" mnemonicParsing="false" onAction="#addSyllable" text="Create" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                  <Text fx:id="textVerifySyllable" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a syllable to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+            <ListView fx:id="listViewSyllables" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isASyllableSelected" prefHeight="354.0" prefWidth="418.0">
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem fx:id="menuItemDeleteSyll" mnemonicParsing="false" onAction="#deleteSyllable" text="Delete" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </ListView>
+         </children>
+      </VBox>
    </children>
-</VBox>
+</HBox>
