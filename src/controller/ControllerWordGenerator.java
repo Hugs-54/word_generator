@@ -4,10 +4,7 @@ import generator.WordGenerator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -29,15 +26,21 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private ListView<String> listViewGeneratedWords;
     private ObservableList<String> listGeneratedWords;
+    private boolean isAWordSelected;
     @FXML
     private Label labelTooltipHelp;
     @FXML
     private Label labelHelp;
+    @FXML
+    private MenuItem menuItemUseAsModel;
+    @FXML
+    private MenuItem menuItemSaveWord;
 
     public ControllerWordGenerator(WordGenerator wordGenerator)
     {
         wordGenerator.addObservator(this);
         this.wordGenerator = wordGenerator;
+        this.isAWordSelected = false;
     }
 
     @FXML
@@ -105,6 +108,20 @@ public class ControllerWordGenerator implements Observator {
             buttonGenerate.setDisable(true);
             textVerifyModel.setFill(Color.RED);
         }
+    }
+
+    @FXML
+    public void isAWordSelected()
+    {
+        isAWordSelected = listViewGeneratedWords.getSelectionModel().getSelectedIndices().size() == 0;
+        menuItemSaveWord.setDisable(isAWordSelected);
+        menuItemUseAsModel.setDisable(isAWordSelected);
+    }
+
+    @FXML
+    public void useAWordAsModel()
+    {
+        textFieldModel.setText(listViewGeneratedWords.getSelectionModel().getSelectedItem());
     }
 
     @Override

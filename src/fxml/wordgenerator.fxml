@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -26,8 +29,14 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label contentDisplay="CENTER" text="Number of words" GridPane.columnIndex="1" />
-            <TextField fx:id="textFieldNumberOfWords" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onKeyReleased="#setNumberOfWords" prefHeight="25.0" prefWidth="35.0" text="10" GridPane.columnIndex="2" GridPane.halignment="LEFT" />
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Number of words" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin></Label>
+            <TextField fx:id="textFieldNumberOfWords" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onKeyReleased="#setNumberOfWords" prefHeight="25.0" prefWidth="35.0" text="10" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets right="25.0" />
+               </GridPane.margin></TextField>
             <TextField fx:id="textFieldModel" maxWidth="-Infinity" onKeyReleased="#checkModel" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button fx:id="buttonGenerate" disable="true" mnemonicParsing="false" onAction="#generate" text="Generate" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
             <Text fx:id="textVerifyModel" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a model to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
@@ -46,6 +55,14 @@
             </Label>
          </children>
       </GridPane>
-      <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="285.0" prefWidth="529.0" />
+      <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isAWordSelected" prefHeight="285.0" prefWidth="539.0">
+         <contextMenu>
+            <ContextMenu>
+              <items>
+                <MenuItem fx:id="menuItemUseAsModel" mnemonicParsing="false" onAction="#useAWordAsModel" text="Use as model" />
+                  <MenuItem fx:id="menuItemSaveWord" mnemonicParsing="false" text="Save the word" />
+              </items>
+            </ContextMenu>
+         </contextMenu></ListView>
    </children>
 </VBox>
