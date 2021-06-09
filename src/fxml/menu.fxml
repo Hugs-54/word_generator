@@ -4,16 +4,18 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 
-<MenuBar xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16" fx:controller="controller.ControllerMenu">
+<MenuBar xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMenu">
   <menus>
     <Menu mnemonicParsing="false" text="File">
       <items>
-        <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save project" />
+        <MenuItem mnemonicParsing="false" text="Quit" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Edit">
       <items>
-        <MenuItem mnemonicParsing="false" text="Number of word" />
+            <MenuItem mnemonicParsing="false" onAction="#createOutuputFile" text="Create an output file" />
+        <MenuItem mnemonicParsing="false" onAction="#selectOutuputFile" text="Select the output file" />
       </items>
     </Menu>
   </menus>

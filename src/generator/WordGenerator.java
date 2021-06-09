@@ -2,12 +2,11 @@ package generator;
 
 import view.Subject;
 
-import java.io.Serializable;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class WordGenerator extends Subject implements Iterable<String> {
 
@@ -15,8 +14,9 @@ public class WordGenerator extends Subject implements Iterable<String> {
     private final char[] vowels;
     private final char[] consonne;
     private final StringBuilder strg;
-    private ArrayList<String> generatedWords;
+    private final ArrayList<String> generatedWords;
     private int numberOfWords;
+    private SaveManager saveManager;
 
     public WordGenerator()
     {
@@ -26,6 +26,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         this.random = new Random();
         this.generatedWords = new ArrayList<>();
         this.numberOfWords = 10;
+        this.saveManager = new SaveManager();
     }
 
     /**
@@ -206,5 +207,29 @@ public class WordGenerator extends Subject implements Iterable<String> {
 
     public int getNumberOfWords() {
         return numberOfWords;
+    }
+
+    public void saveAWord(int i)
+    {
+        saveManager.saveAWord(generatedWords.get(i), String.valueOf(i));
+    }
+
+    public void createFile(File path) throws IOException {
+        saveManager.createFile(path);
+        notifyObservators();
+    }
+
+    public void selectOutuputFile(File path)
+    {
+        saveManager.defineOutputFile(path);
+        notifyObservators();
+    }
+
+    public String getCurrentPath() {
+        return saveManager.getCurrentPath();
+    }
+
+    public boolean hasAPath() {
+        return saveManager.hasAPath();
     }
 }

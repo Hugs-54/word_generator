@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
    <children>
       <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="662.0">
         <columnConstraints>
@@ -55,14 +55,15 @@
             </Label>
          </children>
       </GridPane>
-      <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isAWordSelected" prefHeight="285.0" prefWidth="539.0">
+      <ListView fx:id="listViewGeneratedWords" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isAWordSelected" prefHeight="467.0" prefWidth="539.0">
          <contextMenu>
             <ContextMenu>
               <items>
                 <MenuItem fx:id="menuItemUseAsModel" mnemonicParsing="false" onAction="#useAWordAsModel" text="Use as model" />
-                  <MenuItem fx:id="menuItemSaveWord" mnemonicParsing="false" text="Save the word" />
+                  <MenuItem fx:id="menuItemSaveWord" mnemonicParsing="false" onAction="#saveAWord" text="Save the word" />
               </items>
             </ContextMenu>
          </contextMenu></ListView>
+      <Label fx:id="labelCurrentPathFile" text="Current path file : " />
    </children>
 </VBox>

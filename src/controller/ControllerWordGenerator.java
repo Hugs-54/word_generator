@@ -35,6 +35,8 @@ public class ControllerWordGenerator implements Observator {
     private MenuItem menuItemUseAsModel;
     @FXML
     private MenuItem menuItemSaveWord;
+    @FXML
+    private Label labelCurrentPathFile;
 
     public ControllerWordGenerator(WordGenerator wordGenerator)
     {
@@ -75,7 +77,6 @@ public class ControllerWordGenerator implements Observator {
         if(!textFieldNumberOfWords.getText().isBlank() && !textFieldNumberOfWords.getText().isEmpty())
         {
             wordGenerator.setNumberOfWords(Integer.parseInt(textFieldNumberOfWords.getText()));
-            System.out.println(Integer.parseInt(textFieldNumberOfWords.getText()));
         }
     }
 
@@ -113,9 +114,9 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void isAWordSelected()
     {
-        isAWordSelected = listViewGeneratedWords.getSelectionModel().getSelectedIndices().size() == 0;
-        menuItemSaveWord.setDisable(isAWordSelected);
-        menuItemUseAsModel.setDisable(isAWordSelected);
+        isAWordSelected = listViewGeneratedWords.getSelectionModel().getSelectedIndices().size() == 1;
+        menuItemSaveWord.setDisable(!isAWordSelected || !wordGenerator.hasAPath());
+        menuItemUseAsModel.setDisable(!isAWordSelected);
     }
 
     @FXML
@@ -124,9 +125,16 @@ public class ControllerWordGenerator implements Observator {
         textFieldModel.setText(listViewGeneratedWords.getSelectionModel().getSelectedItem());
     }
 
+    @FXML
+    public void saveAWord()
+    {
+        //Add description
+        wordGenerator.saveAWord(listViewGeneratedWords.getSelectionModel().getSelectedIndices().get(0));
+    }
+
     @Override
     public void react()
     {
-
+        this.labelCurrentPathFile.setText("Current path file : "+wordGenerator.getCurrentPath());
     }
 }
