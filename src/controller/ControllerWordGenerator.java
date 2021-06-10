@@ -39,9 +39,9 @@ public class ControllerWordGenerator implements Observator {
     private ObservableList<String> listGeneratedWords;
     private boolean isAWordSelected;
     @FXML
-    private Label labelTooltipHelp;
+    private Label labelTooltipHelpMo;
     @FXML
-    private Label labelHelp;
+    private Label labelHelpMo;
     @FXML
     private MenuItem menuItemUseAsModel;
     @FXML
@@ -49,7 +49,7 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private Label labelCurrentPathFile;
     @FXML
-    private Tooltip tooltipHelp;
+    private Tooltip tooltipHelpMo;
     @FXML
     private Text textVerifySyllable;
     @FXML
@@ -59,9 +59,14 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private ListView<String> listViewSyllables;
     private ObservableList<String> listSyllables;
-    private boolean isASyllableSelected;
     @FXML
     private MenuItem menuItemDeleteSyll;
+    @FXML
+    private Label labelHelpSy;
+    @FXML
+    private Label labelTooltipHelpSy;
+    @FXML
+    private Tooltip tooltipHelpSy;
 
 
     public ControllerWordGenerator(WordGenerator wordGenerator)
@@ -81,13 +86,17 @@ public class ControllerWordGenerator implements Observator {
         this.listViewSyllables.setItems(listSyllables);
 
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
+        ImageView image2 = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
         image.setFitHeight(18);
         image.setFitWidth(18);
-        this.labelHelp.setGraphic(image);
-        tooltipHelp.setShowDuration(Duration.seconds(30));
-        labelTooltipHelp.setText("How to use model :\n- Number : Generate words randomly to a size of Number\n- C : Random consonne\n- V : Random vowel\n- S : Random syllable\n- S/ : Random syllable that contains vowel\n- a-z : The exact letter\n- 2C 2V 2S 2S/ : two successive and identical letter or syllable (2 to 9)\n");
-
-
+        image2.setFitHeight(18);
+        image2.setFitWidth(18);
+        this.labelHelpMo.setGraphic(image);
+        this.labelHelpSy.setGraphic(image2);
+        tooltipHelpMo.setShowDuration(Duration.seconds(30));
+        tooltipHelpSy.setShowDuration(Duration.seconds(30));
+        labelTooltipHelpMo.setText("How to use Model :\n- Number : Generate words randomly to a size of Number\n- C : Random consonne\n- V : Random vowel\n- S : Random syllable\n- S/ : Random syllable that contains vowel\n- a-z : The exact letter\n- 2C~2V~2S~2S/ : two successive and identical letter or syllable (2 to 9)\n- apostrophe, hyphen and letters with accent are allowed.");
+        labelTooltipHelpSy.setText("How to create Syllable :\nLike in model, C - V - letter\napostrophe, hyphen, letters with accent\n2C~2V are allowed (2 to 9).");
     }
 
     @FXML
@@ -235,7 +244,7 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void isASyllableSelected()
     {
-        isASyllableSelected = listViewSyllables.getSelectionModel().getSelectedIndices().size() == 1;
+        boolean isASyllableSelected = listViewSyllables.getSelectionModel().getSelectedIndices().size() == 1;
         menuItemDeleteSyll.setDisable(!isASyllableSelected);
     }
 
@@ -243,6 +252,7 @@ public class ControllerWordGenerator implements Observator {
     public void useAWordAsModel()
     {
         textFieldModel.setText(listViewGeneratedWords.getSelectionModel().getSelectedItem());
+        checkModel();
     }
 
     @FXML

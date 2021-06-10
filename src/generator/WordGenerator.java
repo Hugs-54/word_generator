@@ -270,7 +270,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
                     return letter;
                 }
                 char nextLetter = model.charAt(i+1);
-                if(nextLetter != 'C' && nextLetter != 'V' && nextLetter != 'S' && (nextLetter < 97 || nextLetter > 122))
+                if(nextLetter != 'C' && nextLetter != 'V' && nextLetter != 'S' && (nextLetter < 97 || nextLetter > 122) && (nextLetter < 224 || nextLetter > 253))
                 {
                     return letter;
                 }
@@ -280,7 +280,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
             {
                 return letter;
             }
-            else if(letter != 'C' && letter != 'V' && letter != 'S' && letter != ' ' && letter != '/' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122))
+            else if(letter != 'C' && letter != 'V' && letter != 'S' && letter != ' ' && letter != '/' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122) && (letter < 224 || letter > 253))
             {
                 return letter;
             }

@@ -21,7 +21,7 @@
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="753.0" prefWidth="600.0" spacing="8.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create words">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Words">
                <font>
                   <Font size="18.0" />
                </font>
@@ -56,11 +56,11 @@
                   </TextField>
                   <Button fx:id="buttonGenerate" disable="true" mnemonicParsing="false" onAction="#generateModel" text="Generate" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
                   <Text fx:id="textVerifyModel" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a model to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                  <Label fx:id="labelHelp" text="Help" GridPane.rowIndex="1">
+                  <Label fx:id="labelHelpMo" text="Help" GridPane.rowIndex="1">
                      <tooltip>
-                        <Tooltip fx:id="tooltipHelp">
+                        <Tooltip fx:id="tooltipHelpMo">
                            <graphic>
-                              <Label fx:id="labelTooltipHelp">
+                              <Label fx:id="labelTooltipHelpMo">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -88,18 +88,19 @@
          </children>
       </VBox>
       <Separator orientation="VERTICAL" prefHeight="200.0" />
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="490.0" spacing="10.0">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="548.0" spacing="10.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create syllables">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Syllables">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
             <Separator prefHeight="0.0" prefWidth="102.0" />
-            <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="662.0">
+            <GridPane alignment="CENTER" prefHeight="90.0" prefWidth="571.0">
                <columnConstraints>
-                  <ColumnConstraints />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="324.0" />
+                  <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+                  <ColumnConstraints halignment="CENTER" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="324.0" minWidth="10.0" prefWidth="299.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="76.0" />
                </columnConstraints>
                <rowConstraints>
@@ -108,16 +109,29 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TextField fx:id="textFieldSyllable" maxWidth="-Infinity" onKeyReleased="#checkSyllable" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <TextField fx:id="textFieldSyllable" maxWidth="-Infinity" onKeyReleased="#checkSyllable" prefHeight="25.0" prefWidth="274.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </TextField>
-                  <Button fx:id="buttonCreateSyllable" disable="true" mnemonicParsing="false" onAction="#addSyllable" text="Create" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <Text fx:id="textVerifySyllable" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a syllable to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <Button fx:id="buttonCreateSyllable" disable="true" mnemonicParsing="false" onAction="#addSyllable" text="Create" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                  <Text fx:id="textVerifySyllable" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Write a syllable to begin." textAlignment="CENTER" wrappingWidth="300.13671875" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                  <Label fx:id="labelHelpSy" text="Help" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <tooltip>
+                        <Tooltip fx:id="tooltipHelpSy">
+                           <graphic>
+                              <Label fx:id="labelTooltipHelpSy">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </graphic>
+                        </Tooltip>
+                     </tooltip>
+                  </Label>
                </children>
             </GridPane>
-            <ListView fx:id="listViewSyllables" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isASyllableSelected" prefHeight="354.0" prefWidth="418.0">
+            <ListView fx:id="listViewSyllables" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#isASyllableSelected" prefHeight="354.0" prefWidth="462.0">
                <contextMenu>
                   <ContextMenu>
                     <items>

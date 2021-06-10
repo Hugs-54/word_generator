@@ -34,7 +34,7 @@ public class Syllable {
         char letter;
         for (int i = 0; i < syllable.length(); i++) {
             letter = syllable.charAt(i);
-            if(letter == 'a' || letter == 'e' || letter == 'u' || letter == 'i' || letter == 'o' || letter == 'y')
+            if(letter == 'a' || letter == 'e' || letter == 'u' || letter == 'i' || letter == 'o' || letter == 'y' || (letter >= 224 && letter <= 253))
             {
                 containsVowel = true;
             }
