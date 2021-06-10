@@ -85,7 +85,7 @@ public class ControllerWordGenerator implements Observator {
         image.setFitWidth(18);
         this.labelHelp.setGraphic(image);
         tooltipHelp.setShowDuration(Duration.seconds(30));
-        labelTooltipHelp.setText("How to use model :\n- Number : Generate words randomly to a size of Number\n- C : Random consonne\n- V : Random vowel\n- a-z : The exact letter\n- 2C/2V : two successive and identical letter (2 to 9)\n");
+        labelTooltipHelp.setText("How to use model :\n- Number : Generate words randomly to a size of Number\n- C : Random consonne\n- V : Random vowel\n- S : Random syllable\n- S/ : Random syllable that contains vowel\n- a-z : The exact letter\n- 2C 2V 2S 2S/ : two successive and identical letter or syllable (2 to 9)\n");
 
 
     }
@@ -119,11 +119,17 @@ public class ControllerWordGenerator implements Observator {
         }
     }
 
-    public void actionModelCorrect()
+    /**
+     * Modify the state of the button generate and the verification text
+     * @param text of verication
+     * @param disable boolean to deactivate the button
+     * @param color of the text
+     */
+    public void actionModel(String text, boolean disable, Color color)
     {
-        textVerifyModel.setText("The model is correct.");
-        buttonGenerate.setDisable(false);
-        textVerifyModel.setFill(Color.GREEN);
+        textVerifyModel.setText(text);
+        buttonGenerate.setDisable(disable);
+        textVerifyModel.setFill(color);
     }
 
     @FXML
@@ -132,40 +138,64 @@ public class ControllerWordGenerator implements Observator {
         char letter = (wordGenerator.modelIsCorrect(textFieldModel.getText()));
         if(textFieldModel.getText().isEmpty() || textFieldModel.getText().isBlank())
         {
-            textVerifyModel.setText("Write a model to begin.");
-            buttonGenerate.setDisable(true);
-            textVerifyModel.setFill(Color.BLACK);
+            actionModel("Write a model to begin.",true,Color.BLACK);
+        }
+        else if(letter == 'S')
+        {
+            actionModel("You need to create at least one syllable to use S.",true,Color.RED);
+        }
+        else if(letter == '/')
+        {
+            actionModel("The character '/' can only be placed after S.",true,Color.RED);
+        }
+        else if(wordGenerator.syllableVowelRequested(textFieldModel.getText()))
+        {
+            if(!wordGenerator.syllablesHasVowels())
+            {
+                actionModel("You need to create at least one syllable with a vowel to use S/.",true,Color.RED);
+            }
+            else
+            {
+                actionModel("The model is correct.",false,Color.GREEN);
+            }
         }
         else if(wordGenerator.isAValidNumber(textFieldModel.getText()))
         {
             if(Integer.parseInt(textFieldModel.getText()) > wordGenerator.getMaxAuthorizeLetter())
             {
-                textVerifyModel.setText("For safety, the number of letter can't exceed "+ wordGenerator.getMaxAuthorizeLetter()+".\nYou can change this setting in the menu.");
-                buttonGenerate.setDisable(true);
-                textVerifyModel.setFill(Color.RED);
+                actionModel("For safety, the number of letter can't exceed "+ wordGenerator.getMaxAuthorizeLetter()+".\nYou can change this setting in the menu.",true,Color.RED);
             }
             else
             {
-                actionModelCorrect();
+                actionModel("The model is correct.",false,Color.GREEN);
             }
         }
         else if(letter == ' ')
         {
-            actionModelCorrect();
+            actionModel("The model is correct.",false,Color.GREEN);
         }
         //If the letter is empty, there is no problem
         else if(letter >= 50 && letter <= 57)
         {
-            textVerifyModel.setText("The number '"+letter+"' must be followed by a letter.");
-            buttonGenerate.setDisable(true);
-            textVerifyModel.setFill(Color.RED);
+            actionModel("The number '"+letter+"' must be followed by a letter.",true,Color.RED);
         }
         else
         {
-            textVerifyModel.setText("The character '"+letter+"' is not allowed in the model.");
-            buttonGenerate.setDisable(true);
-            textVerifyModel.setFill(Color.RED);
+            actionModel("The character '"+letter+"' is not allowed in the model.",true,Color.RED);
         }
+    }
+
+    /**
+     * Modify the state of the button create and the verification text
+     * @param text of verication
+     * @param disable boolean to deactivate the button
+     * @param color of the text
+     */
+    public void actionSyllable(String text, boolean disable, Color color)
+    {
+        textVerifySyllable.setText(text);
+        buttonCreateSyllable.setDisable(disable);
+        textVerifySyllable.setFill(color);
     }
 
     @FXML
@@ -174,33 +204,23 @@ public class ControllerWordGenerator implements Observator {
         char letter = wordGenerator.modelIsCorrect(textFieldSyllable.getText());
         if(textFieldSyllable.getText().isEmpty() || textFieldSyllable.getText().isBlank())
         {
-            textVerifySyllable.setText("Write a model to begin.");
-            buttonCreateSyllable.setDisable(true);
-            textVerifySyllable.setFill(Color.BLACK);
+            actionSyllable("Write a model to begin.",true,Color.BLACK);
         }
         else if(wordGenerator.syllableHasS(textFieldSyllable.getText()))
         {
-            textVerifySyllable.setText("The syllable can not contains S.");
-            buttonCreateSyllable.setDisable(true);
-            textVerifySyllable.setFill(Color.RED);
+            actionSyllable("The syllable can not contains S.",true,Color.RED);
         }
         else if(letter >= 50 && letter <= 57)
         {
-            textVerifySyllable.setText("The number '"+letter+"' must be followed by a letter.");
-            buttonCreateSyllable.setDisable(true);
-            textVerifySyllable.setFill(Color.RED);
+            actionSyllable("The number '"+letter+"' must be followed by a letter.",true,Color.RED);
         }
         else if(letter != ' ')
         {
-            textVerifySyllable.setText("The character '"+letter+"' is not allowed in syllable.");
-            buttonCreateSyllable.setDisable(true);
-            textVerifySyllable.setFill(Color.RED);
+            actionSyllable("The character '"+letter+"' is not allowed in syllable.",true,Color.RED);
         }
         else
         {
-            textVerifySyllable.setText("The syllable is correct.");
-            buttonCreateSyllable.setDisable(false);
-            textVerifySyllable.setFill(Color.GREEN);
+            actionSyllable("The syllable is correct.",false,Color.GREEN);
         }
     }
 
@@ -267,6 +287,7 @@ public class ControllerWordGenerator implements Observator {
         wordGenerator.addSyllable(textFieldSyllable.getText());
         textFieldSyllable.setText("");
         refreshListViewSyllables();
+        checkModel();
     }
 
     private void refreshListViewSyllables()
@@ -283,6 +304,7 @@ public class ControllerWordGenerator implements Observator {
     {
         wordGenerator.deleteSyllable(listViewSyllables.getSelectionModel().getSelectedIndices().get(0));
         refreshListViewSyllables();
+        checkModel();
     }
 
     @Override

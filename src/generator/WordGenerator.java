@@ -13,7 +13,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
     private final Random random;
     private final char[] vowels;
     private final char[] consonne;
-    private final StringBuilder strg;
     private final ArrayList<String> generatedWords;
     private final ArrayList<Syllable> syllables;
     private int maxAuthorizeWords;
@@ -25,7 +24,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
     {
         this.vowels = new char[]{'a','e','u','i','o','y'};
         this.consonne = new char[]{'z','r','t','p','q','s','d','f','g','h','j','k','l','m','w','x','c','v','b','n'};
-        this.strg = new StringBuilder();
         this.random = new Random();
         this.generatedWords = new ArrayList<>();
         this.syllables = new ArrayList<>();
@@ -42,22 +40,22 @@ public class WordGenerator extends Subject implements Iterable<String> {
      */
     public String blindModel(int length)
     {
-        strg.delete(0,strg.length());
+        StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < length; i++)
         {
             int choice = random.nextInt(2);
             if(choice == 0)
             {
                 choice = random.nextInt(vowels.length);
-                strg.append(vowels[choice]);
+                stringBuilder.append(vowels[choice]);
             }
             else
             {
                 choice = random.nextInt(consonne.length);
-                strg.append(consonne[choice]);
+                stringBuilder.append(consonne[choice]);
             }
         }
-        return strg.toString();
+        return stringBuilder.toString();
     }
 
     /**
@@ -77,13 +75,58 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return consonne[random.nextInt(consonne.length)];
     }
 
-    private String addRandomSyllable() {
-        return syllables.get(random.nextInt(syllables.size())).toString();}
-
-    public void resetStringBuilder()
+    /**
+     * Generate a random syllable
+     * @return String of the syllable
+     */
+    private String addRandomSyllable()
     {
-        strg.delete(0,strg.length());
+        return syllables.get(random.nextInt(syllables.size())).toString();
     }
+
+    private String addRandomVowelSyllable()
+    {
+        Syllable sy = syllables.get(random.nextInt(syllables.size()));
+        while(!sy.containsVowel())
+        {
+            sy = syllables.get(random.nextInt(syllables.size()));
+        }
+        return sy.toString();
+    }
+
+    /**
+     * Check if it exist at least one syllable that contains a vowel
+     * @return true is there is a vowel
+     */
+    public boolean syllablesHasVowels()
+    {
+        for (Syllable syllable : syllables)
+        {
+            if (syllable.containsVowel())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean syllableVowelRequested(String model)
+    {
+        for (int i = 0; i < model.length(); i++) {
+            if(model.charAt(i) == 'S')
+            {
+                if(i != model.length()-1)
+                {
+                    if(model.charAt(i+1) == '/')
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Get a random word generate by a model
@@ -95,6 +138,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         char multipleLetter;
         char letter;
         String syllable;
+        StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < model.length(); i++)
         {
             letter = model.charAt(i);
@@ -104,43 +148,70 @@ public class WordGenerator extends Subject implements Iterable<String> {
                 if(model.charAt(i) == 'V')
                 {
                     multipleLetter = addVowel();
-                    strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+                    stringBuilder.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                 }
                 else if (model.charAt(i) == 'C')
                 {
                     multipleLetter = addConsonne();
-                    strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+                    stringBuilder.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
 
                 }
                 else if (model.charAt(i) == 'S')
                 {
-                    syllable = dataModel(addRandomSyllable());
-                    strg.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter))-1)));
+                    if(i == model.length()-1)
+                    {
+                        syllable = dataModel(addRandomSyllable());
+                        stringBuilder.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+                    }
+                    else if(model.charAt(i+1) == '/')
+                    {
+                        syllable = dataModel(addRandomVowelSyllable());
+                        stringBuilder.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+                        i++;
+                    }
+                    else
+                    {
+                        syllable = dataModel(addRandomSyllable());
+                        stringBuilder.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+                    }
+
                 }
                 else
                 {
                     multipleLetter = model.charAt(i);
-                    strg.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
+                    stringBuilder.append(String.valueOf(multipleLetter).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                 }
             }
             else if(letter == 'V')
             {
-                strg.append(addVowel());
+                stringBuilder.append(addVowel());
             }
             else if(letter == 'C')
             {
-                strg.append(addConsonne());
+                stringBuilder.append(addConsonne());
             }
             else if(letter == 'S')
             {
-                dataModel(addRandomSyllable());
+                if(i == model.length()-1)
+                {
+                    stringBuilder.append(dataModel(addRandomSyllable()));
+                }
+                else if(model.charAt(i+1) == '/')
+                {
+                    stringBuilder.append(dataModel(addRandomVowelSyllable()));
+                    i++;
+                }
+                else
+                {
+                    stringBuilder.append(dataModel(addRandomSyllable()));
+                }
             }
             else
             {
-                strg.append(letter);
+                stringBuilder.append(letter);
             }
         }
-        return strg.toString();
+        return stringBuilder.toString();
     }
 
     /**
@@ -162,7 +233,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
             for(int i = 0; i < numberOfWords; i++)
             {
                 generatedWords.add(dataModel(model));
-                resetStringBuilder();
             }
         }
     }
@@ -182,9 +252,17 @@ public class WordGenerator extends Subject implements Iterable<String> {
      */
     public char modelIsCorrect(String model)
     {
+        if(model.length() == 1 && model.charAt(0) == '/')
+        {
+            return '/';
+        }
         for(int i = 0; i < model.length(); i++)
         {
             char letter = model.charAt(i);
+            if(letter == 'S' && syllables.size() == 0)
+            {
+                return letter;
+            }
             if(letter >= 50 && letter <= 57)
             {
                 if(i == model.length()-1)
@@ -198,7 +276,11 @@ public class WordGenerator extends Subject implements Iterable<String> {
                 }
                 i++;
             }
-            else if(letter != 'C' && letter != 'V' && letter != 'S' && letter != ' ' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122))
+            else if(letter == '/' && model.charAt(i-1) != 'S')
+            {
+                return letter;
+            }
+            else if(letter != 'C' && letter != 'V' && letter != 'S' && letter != ' ' && letter != '/' && letter != '-' && letter != '\'' && (letter < 97 || letter > 122))
             {
                 return letter;
             }
