@@ -19,6 +19,7 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 import view.Observator;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -47,6 +48,8 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private MenuItem menuItemSaveWord;
     @FXML
+    private MenuItem menuItemSaveModel;
+    @FXML
     private Label labelCurrentPathFile;
     @FXML
     private Tooltip tooltipHelpMo;
@@ -67,6 +70,16 @@ public class ControllerWordGenerator implements Observator {
     private Label labelTooltipHelpSy;
     @FXML
     private Tooltip tooltipHelpSy;
+    @FXML
+    private ListView<String> listViewModels;
+    private ObservableList<String> listModels;
+    private ArrayList<String> arrayListModels;
+    @FXML
+    private MenuItem menuItemDeleteModel;
+    @FXML
+    private MenuItem menuItemUseModel;
+    @FXML
+    private MenuItem menuItemSaveModelTextField;
 
 
     public ControllerWordGenerator(WordGenerator wordGenerator)
@@ -74,6 +87,7 @@ public class ControllerWordGenerator implements Observator {
         wordGenerator.addObservator(this);
         this.wordGenerator = wordGenerator;
         this.isAWordSelected = false;
+        this.arrayListModels = new ArrayList<>();
     }
 
     @FXML
@@ -84,6 +98,9 @@ public class ControllerWordGenerator implements Observator {
 
         this.listSyllables = FXCollections.observableArrayList();
         this.listViewSyllables.setItems(listSyllables);
+
+        this.listModels = FXCollections.observableArrayList();
+        this.listViewModels.setItems(listModels);
 
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
         ImageView image2 = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
@@ -161,7 +178,7 @@ public class ControllerWordGenerator implements Observator {
         {
             if(!wordGenerator.syllablesHasVowels())
             {
-                actionModel("You need to create at least one syllable with a vowel to use S/.",true,Color.RED);
+                actionModel("You need to create at least one syllable that contains a vowel to use S/.",true,Color.RED);
             }
             else
             {
@@ -238,6 +255,7 @@ public class ControllerWordGenerator implements Observator {
     {
         isAWordSelected = listViewGeneratedWords.getSelectionModel().getSelectedIndices().size() == 1;
         menuItemSaveWord.setDisable(!isAWordSelected || !wordGenerator.hasAPath());
+        menuItemSaveModel.setDisable(!isAWordSelected);
         menuItemUseAsModel.setDisable(!isAWordSelected);
     }
 
@@ -315,6 +333,54 @@ public class ControllerWordGenerator implements Observator {
         wordGenerator.deleteSyllable(listViewSyllables.getSelectionModel().getSelectedIndices().get(0));
         refreshListViewSyllables();
         checkModel();
+    }
+
+    @FXML
+    public void isAModelSelected()
+    {
+        boolean isAModelSelected = listViewModels.getSelectionModel().getSelectedIndices().size() == 1;
+        menuItemDeleteModel.setDisable(!isAModelSelected);
+        menuItemUseModel.setDisable(!isAModelSelected);
+    }
+
+    @FXML
+    public void deleteModel()
+    {
+        arrayListModels.remove(listViewModels.getSelectionModel().getSelectedIndex());
+        refreshListViewModels();
+    }
+
+    private void refreshListViewModels()
+    {
+        listModels.clear();
+        listModels.addAll(arrayListModels);
+    }
+
+    @FXML
+    public void saveModelFromWords()
+    {
+        arrayListModels.add(listViewGeneratedWords.getSelectionModel().getSelectedItem());
+        refreshListViewModels();
+    }
+
+    @FXML
+    public void saveModelFromTextField()
+    {
+        arrayListModels.add(textFieldModel.getText());
+        refreshListViewModels();
+    }
+
+    @FXML
+    public void useModel()
+    {
+        textFieldModel.setText(listViewModels.getSelectionModel().getSelectedItem());
+        checkModel();
+    }
+
+    @FXML
+    public void isSelectedTextField()
+    {
+        menuItemSaveModelTextField.setDisable(textFieldModel.getText().length() <= 1);
     }
 
     @Override
