@@ -39,7 +39,14 @@ public class ControllerMenu implements Observator {
     {
         Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if(wordGenerator.getCurrentPath().equals(""))
+        {
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        }
+        else
+        {
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home"),wordGenerator.getCurrentPathDirectory()));
+        }
         FileChooser.ExtensionFilter txt = new FileChooser.ExtensionFilter("TXT","*.txt");
         fileChooser.getExtensionFilters().add(txt);
         File path = fileChooser.showOpenDialog(stage);

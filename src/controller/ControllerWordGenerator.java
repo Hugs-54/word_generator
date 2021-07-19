@@ -15,10 +15,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 import view.Observator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
@@ -381,6 +384,28 @@ public class ControllerWordGenerator implements Observator {
     public void isSelectedTextField()
     {
         menuItemSaveModelTextField.setDisable(textFieldModel.getText().length() <= 1);
+    }
+
+    @FXML
+    public void selectOutuputFile()
+    {
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        if(wordGenerator.getCurrentPath().equals(""))
+        {
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        }
+        else
+        {
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home"),wordGenerator.getCurrentPathDirectory()));
+        }
+        FileChooser.ExtensionFilter txt = new FileChooser.ExtensionFilter("TXT","*.txt");
+        fileChooser.getExtensionFilters().add(txt);
+        File path = fileChooser.showOpenDialog(stage);
+        if(path != null)
+        {
+            wordGenerator.selectOutuputFile(path);
+        }
     }
 
     @Override

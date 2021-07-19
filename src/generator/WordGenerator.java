@@ -345,6 +345,24 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return saveManager.getCurrentPath();
     }
 
+    /*
+    String fname="C:\\textfiles\\db\\query\\query.txt";
+ String[] items= fname.split("\\\\");
+ System.out.println(Arrays.toString(items));
+     */
+    public String getCurrentPathDirectory() {
+        String[] str = saveManager.getCurrentPath().split("\\\\");
+        StringBuilder s = new StringBuilder();
+        for (int i = 3; i < str.length - 1; i++) {
+            s.append(str[i]);
+            if(i < str.length-2)
+            {
+                s.append("\\");
+            }
+        }
+        return s.toString();
+    }
+
     public boolean hasAPath() {
         return saveManager.hasAPath();
     }

@@ -92,7 +92,14 @@
                   </ContextMenu>
                </contextMenu>
             </ListView>
-            <Label fx:id="labelCurrentPathFile" text="Current path file : " />
+            <Label fx:id="labelCurrentPathFile" text="Current path file : ">
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#selectOutuputFile" text="Select the output file" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu></Label>
          </children>
       </VBox>
       <Separator orientation="VERTICAL" prefHeight="200.0" />
