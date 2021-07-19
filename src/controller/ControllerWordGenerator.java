@@ -76,7 +76,6 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private ListView<String> listViewModels;
     private ObservableList<String> listModels;
-    private ArrayList<String> arrayListModels;
     @FXML
     private MenuItem menuItemDeleteModel;
     @FXML
@@ -90,7 +89,6 @@ public class ControllerWordGenerator implements Observator {
         wordGenerator.addObservator(this);
         this.wordGenerator = wordGenerator;
         this.isAWordSelected = false;
-        this.arrayListModels = new ArrayList<>();
     }
 
     @FXML
@@ -349,27 +347,30 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void deleteModel()
     {
-        arrayListModels.remove(listViewModels.getSelectionModel().getSelectedIndex());
+        wordGenerator.removeModel(listViewModels.getSelectionModel().getSelectedIndex());
         refreshListViewModels();
     }
 
     private void refreshListViewModels()
     {
         listModels.clear();
-        listModels.addAll(arrayListModels);
+        for (Iterator<String> it = wordGenerator.iteratorModels(); it.hasNext(); ) {
+            String s = it.next();
+            listModels.add(s);
+        }
     }
 
     @FXML
     public void saveModelFromWords()
     {
-        arrayListModels.add(listViewGeneratedWords.getSelectionModel().getSelectedItem());
+        wordGenerator.addModel(listViewGeneratedWords.getSelectionModel().getSelectedItem());
         refreshListViewModels();
     }
 
     @FXML
     public void saveModelFromTextField()
     {
-        arrayListModels.add(textFieldModel.getText());
+        wordGenerator.addModel(textFieldModel.getText());
         refreshListViewModels();
     }
 
@@ -412,6 +413,8 @@ public class ControllerWordGenerator implements Observator {
     public void react()
     {
         this.labelCurrentPathFile.setText("Current path file : "+wordGenerator.getCurrentPath());
+        refreshListViewModels();
+        refreshListViewSyllables();
         checkModel();
     }
 }

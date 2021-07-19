@@ -8,13 +8,14 @@
   <menus>
     <Menu mnemonicParsing="false" text="File">
       <items>
-            <MenuItem disable="true" mnemonicParsing="false" text="Save project" />
+            <MenuItem mnemonicParsing="false" onAction="#saveProject" text="Save project" />
+            <MenuItem mnemonicParsing="false" onAction="#openProject" text="Open project" />
         <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit" />
       </items>
     </Menu>
     <Menu mnemonicParsing="false" text="Edit">
       <items>
-            <MenuItem mnemonicParsing="false" onAction="#createOutuputFile" text="Create an output file" />
+            <MenuItem mnemonicParsing="false" onAction="#createOutputFile" text="Create an output file" />
         <MenuItem mnemonicParsing="false" onAction="#selectOutuputFile" text="Select the output file" />
       </items>
     </Menu>

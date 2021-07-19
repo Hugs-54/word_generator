@@ -15,10 +15,11 @@ public class WordGenerator extends Subject implements Iterable<String> {
     private final char[] consonne;
     private final ArrayList<String> generatedWords;
     private final ArrayList<Syllable> syllables;
+    private final ArrayList<String> models;
     private int maxAuthorizeWords;
     private int maxAuthorizeLetter;
     private int numberOfWords;
-    private SaveManager saveManager;
+    private final SaveManager saveManager;
 
     public WordGenerator()
     {
@@ -27,8 +28,9 @@ public class WordGenerator extends Subject implements Iterable<String> {
         this.random = new Random();
         this.generatedWords = new ArrayList<>();
         this.syllables = new ArrayList<>();
+        this.models = new ArrayList<>();
         this.numberOfWords = 10;
-        this.saveManager = new SaveManager();
+        this.saveManager = new SaveManager(this);
         this.maxAuthorizeWords = 50;
         this.maxAuthorizeLetter = 50;
     }
@@ -316,6 +318,10 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return generatedWords.iterator();
     }
 
+    public Iterator<String> iteratorModels() {
+        return models.iterator();
+    }
+
     public Iterator<Syllable> iteratorSyllables()
     {
         return syllables.iterator();
@@ -345,11 +351,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return saveManager.getCurrentPath();
     }
 
-    /*
-    String fname="C:\\textfiles\\db\\query\\query.txt";
- String[] items= fname.split("\\\\");
- System.out.println(Arrays.toString(items));
-     */
     public String getCurrentPathDirectory() {
         String[] str = saveManager.getCurrentPath().split("\\\\");
         StringBuilder s = new StringBuilder();
@@ -366,7 +367,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
     public boolean hasAPath() {
         return saveManager.hasAPath();
     }
-
 
     public int getMaxAuthorizeWords() {
         return maxAuthorizeWords;
@@ -414,5 +414,36 @@ public class WordGenerator extends Subject implements Iterable<String> {
 
     public void deleteSyllable(int i) {
         syllables.remove(i);
+    }
+
+    public void deleteAllSyllable()
+    {
+        syllables.clear();
+    }
+
+    public void deleteAllModels()
+    {
+        models.clear();
+    }
+
+    public void removeModel(int selectedIndex)
+    {
+        models.remove(selectedIndex);
+    }
+
+    public void addModel(String selectedItem)
+    {
+        models.add(selectedItem);
+    }
+
+    public void saveProject(File path)
+    {
+        saveManager.saveProject(path);
+    }
+
+    public void openProject(File path)
+    {
+        saveManager.openProject(path);
+        notifyObservators();
     }
 }

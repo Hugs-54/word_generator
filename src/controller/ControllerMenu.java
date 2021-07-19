@@ -21,17 +21,42 @@ public class ControllerMenu implements Observator {
     }
 
     @FXML
-    public void createOutuputFile() throws IOException {
+    private File createFile(String extension, String name)
+    {
         Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        FileChooser.ExtensionFilter txt = new FileChooser.ExtensionFilter("TXT","*.txt");
-        fileChooser.getExtensionFilters().add(txt);
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home"),wordGenerator.getCurrentPathDirectory()));
+        FileChooser.ExtensionFilter ext = new FileChooser.ExtensionFilter(name,extension);
+        fileChooser.getExtensionFilters().add(ext);
         File path = fileChooser.showSaveDialog(stage);
+        return path;
+    }
+
+    @FXML
+    public void createOutputFile() throws IOException {
+        File path = createFile("*.txt","TXT");
         if(path != null)
         {
             wordGenerator.createFile(path);
         }
+    }
+
+    @FXML
+    public void saveProject()
+    {
+        wordGenerator.saveProject(createFile("*.wg","WG"));
+    }
+
+    @FXML
+    public void openProject()
+    {
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home"),wordGenerator.getCurrentPathDirectory()));
+        FileChooser.ExtensionFilter ext = new FileChooser.ExtensionFilter("WG","*.wg");
+        fileChooser.getExtensionFilters().add(ext);
+        File path = fileChooser.showOpenDialog(stage);
+        wordGenerator.openProject(path);
     }
 
     @FXML
