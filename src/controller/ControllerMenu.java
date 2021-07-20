@@ -14,10 +14,12 @@ import java.io.IOException;
 public class ControllerMenu implements Observator {
 
     private final WordGenerator wordGenerator;
+    private final ControllerWordGenerator cwg;
 
-    public ControllerMenu(WordGenerator wordGenerator)
+    public ControllerMenu(WordGenerator wordGenerator, ControllerWordGenerator cwg)
     {
         this.wordGenerator = wordGenerator;
+        this.cwg = cwg;
     }
 
     @FXML
@@ -109,6 +111,13 @@ public class ControllerMenu implements Observator {
                 wordGenerator.setMaxAuthorizeLetter(Integer.parseInt(value));
             }
         });
+    }
+
+    @FXML
+    public void newProject()
+    {
+        wordGenerator.newProject();
+        cwg.newProject();
     }
 
     @FXML

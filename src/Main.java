@@ -18,7 +18,7 @@ public class Main extends Application {
         primaryStage.setTitle("Word Generator");
         WordGenerator wordGenerator = new WordGenerator();
         ControllerWordGenerator controllerWordGenerator = new ControllerWordGenerator(wordGenerator);
-        ControllerMenu controllerMenu = new ControllerMenu(wordGenerator);
+        ControllerMenu controllerMenu = new ControllerMenu(wordGenerator,controllerWordGenerator);
 
         FXMLLoader fxml = new FXMLLoader();
         fxml.setLocation(getClass().getResource("fxml/menu.fxml"));

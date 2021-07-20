@@ -446,4 +446,12 @@ public class WordGenerator extends Subject implements Iterable<String> {
         saveManager.openProject(path);
         notifyObservators();
     }
+
+    public void newProject()
+    {
+
+        deleteAllModels();
+        deleteAllSyllable();
+        selectOutuputFile(null);
+    }
 }

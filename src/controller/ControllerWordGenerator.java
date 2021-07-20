@@ -22,7 +22,6 @@ import javafx.util.Pair;
 import view.Observator;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -416,5 +415,14 @@ public class ControllerWordGenerator implements Observator {
         refreshListViewModels();
         refreshListViewSyllables();
         checkModel();
+    }
+
+    public void newProject()
+    {
+        textFieldModel.clear();
+        textFieldSyllable.clear();
+        listGeneratedWords.clear();
+        checkModel();
+        checkSyllable();
     }
 }
