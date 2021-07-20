@@ -20,6 +20,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
     private int maxAuthorizeLetter;
     private int numberOfWords;
     private final SaveManager saveManager;
+    private final Type fantasy;
 
     public WordGenerator()
     {
@@ -33,6 +34,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         this.saveManager = new SaveManager(this);
         this.maxAuthorizeWords = 50;
         this.maxAuthorizeLetter = 50;
+        this.fantasy = new Type("Fantasy.wg");
     }
 
     /**
@@ -135,7 +137,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
      * @param model of the word
      * @return String of the generated word
      */
-    public String dataModel(String model)
+    public String dataModel(String model,String type)
     {
         char multipleLetter;
         char letter;
@@ -162,21 +164,41 @@ public class WordGenerator extends Subject implements Iterable<String> {
                 {
                     if(i == model.length()-1)
                     {
-                        syllable = dataModel(addRandomSyllable());
+                        if(type.equals("fantasy"))
+                        {
+                            syllable = dataModel(fantasy.getRandomSyllable(),"fantasy");
+                        }
+                        else
+                        {
+                            syllable = dataModel(addRandomSyllable(),"none");
+                        }
                         stringBuilder.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                     }
                     else if(model.charAt(i+1) == '/')
                     {
-                        syllable = dataModel(addRandomVowelSyllable());
+                        if(type.equals("fantasy"))
+                        {
+                            syllable = dataModel(fantasy.getRandomVowelSyllable(),"fantasy");
+                        }
+                        else
+                        {
+                            syllable = dataModel(addRandomVowelSyllable(),"none");
+                        }
                         stringBuilder.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                         i++;
                     }
                     else
                     {
-                        syllable = dataModel(addRandomSyllable());
+                        if(type.equals("fantasy"))
+                        {
+                            syllable = dataModel(fantasy.getRandomSyllable(),"fantasy");
+                        }
+                        else
+                        {
+                            syllable = dataModel(addRandomSyllable(),"none");
+                        }
                         stringBuilder.append(String.valueOf(syllable).repeat(Math.max(0, Integer.parseInt(String.valueOf(letter)))));
                     }
-
                 }
                 else
                 {
@@ -196,16 +218,37 @@ public class WordGenerator extends Subject implements Iterable<String> {
             {
                 if(i == model.length()-1)
                 {
-                    stringBuilder.append(dataModel(addRandomSyllable()));
+                    if(type.equals("fantasy"))
+                    {
+                        stringBuilder.append(dataModel(fantasy.getRandomSyllable(),"fantasy"));
+                    }
+                    else
+                    {
+                        stringBuilder.append(dataModel(addRandomSyllable(),"none"));
+                    }
                 }
                 else if(model.charAt(i+1) == '/')
                 {
-                    stringBuilder.append(dataModel(addRandomVowelSyllable()));
+                    if(type.equals("fantasy"))
+                    {
+                        stringBuilder.append(dataModel(fantasy.getRandomVowelSyllable(),"fantasy"));
+                    }
+                    else
+                    {
+                        stringBuilder.append(dataModel(addRandomVowelSyllable(),"none"));
+                    }
                     i++;
                 }
                 else
                 {
-                    stringBuilder.append(dataModel(addRandomSyllable()));
+                    if(type.equals("fantasy"))
+                    {
+                        stringBuilder.append(dataModel(fantasy.getRandomSyllable(),"fantasy"));
+                    }
+                    else
+                    {
+                        stringBuilder.append(dataModel(addRandomSyllable(),"none"));
+                    }
                 }
             }
             else
@@ -217,7 +260,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
     }
 
     /**
-     * Detect the model
+     * Detect the model and create X words
      * @param model to detect
      */
     public void detectionModel(String model)
@@ -234,7 +277,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         {
             for(int i = 0; i < numberOfWords; i++)
             {
-                generatedWords.add(dataModel(model));
+                generatedWords.add(dataModel(model,"none"));
             }
         }
     }
@@ -449,9 +492,20 @@ public class WordGenerator extends Subject implements Iterable<String> {
 
     public void newProject()
     {
-
         deleteAllModels();
         deleteAllSyllable();
         selectOutuputFile(null);
+    }
+
+    public void generateWordsFromType(String type)
+    {
+        generatedWords.clear();
+        for (int i = 0; i < numberOfWords; i++)
+        {
+            if(type.equals("fantasy"))
+            {
+                generatedWords.add(dataModel(fantasy.getRandomModel(), type));
+            }
+        }
     }
 }

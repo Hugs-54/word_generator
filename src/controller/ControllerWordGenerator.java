@@ -408,6 +408,26 @@ public class ControllerWordGenerator implements Observator {
         }
     }
 
+    public void newProject()
+    {
+        textFieldModel.clear();
+        textFieldSyllable.clear();
+        listGeneratedWords.clear();
+        checkModel();
+        checkSyllable();
+    }
+
+    @FXML
+    public void generateFantasyWords()
+    {
+        wordGenerator.generateWordsFromType("fantasy");
+        listGeneratedWords.clear();
+        for (String str: wordGenerator)
+        {
+            listGeneratedWords.add(str);
+        }
+    }
+
     @Override
     public void react()
     {
@@ -417,12 +437,5 @@ public class ControllerWordGenerator implements Observator {
         checkModel();
     }
 
-    public void newProject()
-    {
-        textFieldModel.clear();
-        textFieldSyllable.clear();
-        listGeneratedWords.clear();
-        checkModel();
-        checkSyllable();
-    }
+
 }

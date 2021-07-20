@@ -118,18 +118,18 @@ public class SaveManager {
             wordGenerator.deleteAllSyllable();
             String sy = br.readLine();
             String[] syllables = sy.split("\\|");
-            for (int i = 0; i < syllables.length; i++)
+            for (String syllable : syllables)
             {
-                wordGenerator.addSyllable(syllables[i]);
+                wordGenerator.addSyllable(syllable);
             }
 
             //Model
             wordGenerator.deleteAllModels();
             String mo = br.readLine();
             String[] models = mo.split("\\|");
-            for (int i = 0; i < models.length; i++)
+            for (String model : models)
             {
-                wordGenerator.addModel(models[i]);
+                wordGenerator.addModel(model);
             }
 
             myReader.close();
@@ -138,7 +138,5 @@ public class SaveManager {
         {
             e.printStackTrace();
         }
-
-
     }
 }
