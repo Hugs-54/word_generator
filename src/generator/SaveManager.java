@@ -2,6 +2,7 @@ package generator;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class SaveManager {
 
@@ -31,6 +32,30 @@ public class SaveManager {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Read and save a txt file
+     */
+    public String readFile()
+    {
+        try
+        {
+            Scanner scanner = new Scanner(new File(String.valueOf(outputFile)));
+            StringBuilder strb = new StringBuilder();
+            //read until end of file (EOF)
+            while (scanner.hasNextLine())
+            {
+                strb.append(scanner.nextLine()).append("\n");
+            }
+            scanner.close();
+            return strb.toString();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**
@@ -136,6 +161,20 @@ public class SaveManager {
         }
         catch (IOException e)
         {
+            e.printStackTrace();
+        }
+    }
+
+    public void rewrite(String text)
+    {
+        try {
+            FileWriter myWriter = new FileWriter(outputFile);
+            myWriter.write(text);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred.");
             e.printStackTrace();
         }
     }

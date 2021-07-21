@@ -377,6 +377,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
     public void saveAWord(String word, String description)
     {
         saveManager.saveAWord(word, description);
+        notifyObservators();
     }
 
     public void createFile(File path) throws IOException {
@@ -507,5 +508,15 @@ public class WordGenerator extends Subject implements Iterable<String> {
                 generatedWords.add(dataModel(fantasy.getRandomModel(), type));
             }
         }
+    }
+
+    public String getTextOutuputFile()
+    {
+        return saveManager.readFile();
+    }
+
+    public void rewriteOutputFile(String text)
+    {
+        saveManager.rewrite(text);
     }
 }

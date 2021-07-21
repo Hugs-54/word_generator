@@ -7,23 +7,77 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="962.0" prefWidth="1719.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="962.0" prefWidth="1803.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerWordGenerator">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="962.0" prefWidth="777.0" spacing="8.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Output file visualization">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Separator prefWidth="200.0" />
+            <StackPane alignment="TOP_CENTER" prefHeight="830.0" prefWidth="631.0">
+               <children>
+                  <TextArea fx:id="textAreaOutputFile" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="830.0" prefWidth="600.0" visible="false">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+                  <Label fx:id="labelOutputFile" alignment="TOP_LEFT" prefHeight="830.0" prefWidth="600.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+            <Separator prefWidth="200.0" />
+            <StackPane prefHeight="30.0" prefWidth="631.0">
+               <children>
+                  <HBox fx:id="HBoxConfirmOutputFile" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" visible="false">
+                     <children>
+                        <Label fx:id="labelWarning" text="Warning">
+                           <tooltip>
+                              <Tooltip fx:id="tooltipWarning">
+                                 <graphic>
+                                    <Label fx:id="labelTooltipWarning">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </graphic>
+                              </Tooltip>
+                           </tooltip>
+                        </Label>
+                        <Button mnemonicParsing="false" onAction="#confirmTextOutputFile" prefHeight="25.0" prefWidth="65.0" text="Confirm" />
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        <Button mnemonicParsing="false" onAction="#cancelTextOutputFile" prefHeight="25.0" prefWidth="65.0" text="Cancel" />
+                     </children>
+                  </HBox>
+                  <Button fx:id="modifyOutputFile" mnemonicParsing="false" onAction="#modifyTextOutputFile" prefHeight="25.0" prefWidth="65.0" text="Modify" />
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="8.0">
          <children>
             <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="733.0" prefWidth="600.0" spacing="8.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Words">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Words" wrappingWidth="108.2724609375">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -132,7 +186,7 @@
       <Separator orientation="VERTICAL" prefHeight="200.0" />
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="548.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="511.0" prefWidth="548.0" spacing="8.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Syllables">
                      <font>
@@ -186,7 +240,7 @@
                   </ListView>
                </children>
             </VBox>
-            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="548.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="548.0" spacing="8.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Saved Models">
                      <font>

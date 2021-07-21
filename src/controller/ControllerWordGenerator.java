@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -82,6 +83,21 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     private MenuItem menuItemSaveModelTextField;
 
+    @FXML
+    private TextArea textAreaOutputFile;
+    @FXML
+    private Label labelOutputFile;
+    @FXML
+    private Button modifyOutputFile;
+    @FXML
+    private HBox HBoxConfirmOutputFile;
+    @FXML
+    private Label labelTooltipWarning;
+    @FXML
+    private Tooltip tooltipWarning;
+    @FXML
+    private Label labelWarning;
+
 
     public ControllerWordGenerator(WordGenerator wordGenerator)
     {
@@ -104,16 +120,22 @@ public class ControllerWordGenerator implements Observator {
 
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
         ImageView image2 = new ImageView(new Image(getClass().getResourceAsStream("/images/question_mark_logo.png")));
+        ImageView image3 = new ImageView(new Image(getClass().getResourceAsStream("/images/exclamation_point_logo.png")));
         image.setFitHeight(18);
         image.setFitWidth(18);
         image2.setFitHeight(18);
         image2.setFitWidth(18);
+        image3.setFitHeight(18);
+        image3.setFitWidth(18);
         this.labelHelpMo.setGraphic(image);
         this.labelHelpSy.setGraphic(image2);
+        this.labelWarning.setGraphic(image3);
         tooltipHelpMo.setShowDuration(Duration.seconds(30));
         tooltipHelpSy.setShowDuration(Duration.seconds(30));
+        tooltipWarning.setShowDuration(Duration.seconds(30));
         labelTooltipHelpMo.setText("How to use Model :\n- Number : Generate words randomly to a size of Number\n- C : Random consonne\n- V : Random vowel\n- S : Random syllable\n- S/ : Random syllable that contains vowel\n- a-z : The exact letter\n- 2C~2V~2S~2S/ : two successive and identical letter or syllable (2 to 9)\n- apostrophe, hyphen and letters with accent are allowed.");
         labelTooltipHelpSy.setText("How to create Syllable :\nLike in model, C - V - letter\napostrophe, hyphen, letters with accent\n2C~2V are allowed (2 to 9).");
+        labelTooltipWarning.setText("When you confirm, the file will be rewrite.");
     }
 
     @FXML
@@ -428,12 +450,50 @@ public class ControllerWordGenerator implements Observator {
         }
     }
 
+    @FXML
+    public void modifyTextOutputFile()
+    {
+        modifyOutputFile.setVisible(false);
+        HBoxConfirmOutputFile.setVisible(true);
+        textAreaOutputFile.setVisible(true);
+        labelOutputFile.setVisible(false);
+        textAreaOutputFile.setText(labelOutputFile.getText());
+    }
+
+    @FXML
+    public void confirmTextOutputFile()
+    {
+        modifyOutputFile.setVisible(true);
+        HBoxConfirmOutputFile.setVisible(false);
+        textAreaOutputFile.setVisible(false);
+        labelOutputFile.setVisible(true);
+        labelOutputFile.setText(textAreaOutputFile.getText());
+        wordGenerator.rewriteOutputFile(textAreaOutputFile.getText());
+    }
+
+    @FXML
+    public void cancelTextOutputFile()
+    {
+        modifyOutputFile.setVisible(true);
+        HBoxConfirmOutputFile.setVisible(false);
+        textAreaOutputFile.setVisible(false);
+        labelOutputFile.setVisible(true);
+    }
+
+    private void refreshLabelAndTextAreaOutputFile()
+    {
+        String str = wordGenerator.getTextOutuputFile();
+        labelOutputFile.setText(str);
+        textAreaOutputFile.setText(str);
+    }
+
     @Override
     public void react()
     {
         this.labelCurrentPathFile.setText("Current path file : "+wordGenerator.getCurrentPath());
         refreshListViewModels();
         refreshListViewSyllables();
+        refreshLabelAndTextAreaOutputFile();
         checkModel();
     }
 
