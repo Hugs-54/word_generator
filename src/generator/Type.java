@@ -1,9 +1,6 @@
 package generator;
 
-import javax.xml.transform.stream.StreamSource;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 
 public class Type {
@@ -16,8 +13,9 @@ public class Type {
     {
         try
         {
-            FileReader myReader = new FileReader("src/resources/types/"+name);
-            BufferedReader br = new BufferedReader(myReader);
+            InputStream inputStream = this.getClass().getResourceAsStream("/types/"+name);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader br = new BufferedReader(inputStreamReader);
 
             //Syllable
             String sy = br.readLine();
@@ -34,7 +32,8 @@ public class Type {
             this.models = new String[mode.length];
             System.arraycopy(mode, 0, this.models, 0, models.length);
 
-            myReader.close();
+            //myReader.close();
+            inputStream.close();
         }
         catch (IOException e)
         {
