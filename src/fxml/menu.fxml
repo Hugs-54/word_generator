@@ -22,11 +22,5 @@
         <MenuItem mnemonicParsing="false" onAction="#selectOutuputFile" text="Select the output file" />
       </items>
     </Menu>
-      <Menu mnemonicParsing="false" text="Settings">
-        <items>
-          <MenuItem mnemonicParsing="false" onAction="#setMaxAuthorizeWords" text="Change max words" />
-            <MenuItem mnemonicParsing="false" onAction="#setMaxAuthorizeLetter" text="Change max letter" />
-        </items>
-      </Menu>
   </menus>
 </MenuBar>

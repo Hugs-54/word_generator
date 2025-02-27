@@ -1,4 +1,4 @@
-package generator;
+package model;
 
 import view.Subject;
 
@@ -16,8 +16,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
     private final ArrayList<String> generatedWords;
     private final ArrayList<Syllable> syllables;
     private final ArrayList<String> models;
-    private int maxAuthorizeWords;
-    private int maxAuthorizeLetter;
     private int numberOfWords;
     private final SaveManager saveManager;
     private final Type fantasy;
@@ -32,34 +30,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         this.models = new ArrayList<>();
         this.numberOfWords = 10;
         this.saveManager = new SaveManager(this);
-        this.maxAuthorizeWords = 50;
-        this.maxAuthorizeLetter = 50;
         this.fantasy = new Type("Fantasy.wg");
-    }
-
-    /**
-     * Generate a word with random letters
-     * @param length of the word
-     * @return String of the word
-     */
-    public String blindModel(int length)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < length; i++)
-        {
-            int choice = random.nextInt(2);
-            if(choice == 0)
-            {
-                choice = random.nextInt(vowels.length);
-                stringBuilder.append(vowels[choice]);
-            }
-            else
-            {
-                choice = random.nextInt(consonne.length);
-                stringBuilder.append(consonne[choice]);
-            }
-        }
-        return stringBuilder.toString();
     }
 
     /**
@@ -132,12 +103,20 @@ public class WordGenerator extends Subject implements Iterable<String> {
     }
 
 
+    public String generateWord(String model){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < model.length(); i++) {
+            stringBuilder.append(SymbolDeterminer.symbolToText(model.charAt(i)));
+        }
+        return stringBuilder.toString();
+    }
+
     /**
      * Get a random word generate by a model
      * @param model of the word
      * @return String of the generated word
      */
-    public String dataModel(String model,String type)
+    /*public String dataModel(String model,String type)
     {
         char multipleLetter;
         char letter;
@@ -257,38 +236,8 @@ public class WordGenerator extends Subject implements Iterable<String> {
             }
         }
         return stringBuilder.toString();
-    }
+    }*/
 
-    /**
-     * Detect the model and create X words
-     * @param model to detect
-     */
-    public void detectionModel(String model)
-    {
-        generatedWords.clear();
-        if(isAValidNumber(model))
-        {
-            for(int i = 0; i < numberOfWords; i++)
-            {
-                generatedWords.add(blindModel(Integer.parseInt(model)));
-            }
-        }
-        else
-        {
-            for(int i = 0; i < numberOfWords; i++)
-            {
-                generatedWords.add(dataModel(model,"none"));
-            }
-        }
-    }
-
-    /**
-     * Set the number of words to generate
-     * @param numberOfWords number
-     */
-    public void setNumberOfWords(int numberOfWords) {
-        this.numberOfWords = numberOfWords;
-    }
 
     /**
      * Detect if a model is correct
@@ -333,28 +282,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return ' ';
     }
 
-    /**
-     * Detect if a model is a number. 1 and 0 not allowed
-     * @param model to verify
-     * @return true it's a number
-     */
-    public boolean isAValidNumber(String model)
-    {
-        char letter;
-        for (int i = 0; i < model.length(); i++)
-        {
-            letter = model.charAt(i);
-            if((letter == 48 || letter == 49) && model.length() == 1)
-            {
-                return false;
-            }
-            if(letter < 48 || letter > 57)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public Iterator<String> iterator() {
@@ -370,10 +297,6 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return syllables.iterator();
     }
 
-    public int getNumberOfWords() {
-        return numberOfWords;
-    }
-
     public void saveAWord(String word, String description)
     {
         saveManager.saveAWord(word, description);
@@ -385,7 +308,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         notifyObservators();
     }
 
-    public void selectOutuputFile(File path)
+    public void selectOutputFile(File path)
     {
         saveManager.defineOutputFile(path);
         notifyObservators();
@@ -412,48 +335,9 @@ public class WordGenerator extends Subject implements Iterable<String> {
         return saveManager.hasAPath();
     }
 
-    public int getMaxAuthorizeWords() {
-        return maxAuthorizeWords;
-    }
-
-    public int getMaxAuthorizeLetter() {
-        return maxAuthorizeLetter;
-    }
-
-    public void setMaxAuthorizeWords(int maxAuthorizeWords) {
-        this.maxAuthorizeWords = maxAuthorizeWords;
-    }
-
-    public void setMaxAuthorizeLetter(int maxAuthorizeLetter) {
-        this.maxAuthorizeLetter = maxAuthorizeLetter;
-        notifyObservators();
-    }
-
-    public boolean stringContainsNumber(String string)
-    {
-        for (int i = 0; i < string.length(); i++) {
-            if(string.charAt(i) >= 48 && string.charAt(i) <= 57)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean syllableHasS(String string)
-    {
-        for (int i = 0; i < string.length(); i++) {
-            if(string.charAt(i) == 'S')
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void addSyllable(String sy)
     {
-        syllables.add(new Syllable(sy));
+        //syllables.add(new Syllable(sy));
     }
 
     public void deleteSyllable(int i) {
@@ -495,7 +379,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
     {
         deleteAllModels();
         deleteAllSyllable();
-        selectOutuputFile(null);
+        selectOutputFile(null);
     }
 
     public void generateWordsFromType(String type)
@@ -505,7 +389,7 @@ public class WordGenerator extends Subject implements Iterable<String> {
         {
             if(type.equals("fantasy"))
             {
-                generatedWords.add(dataModel(fantasy.getRandomModel(), type));
+                //generatedWords.add(dataModel(fantasy.getRandomModel(), type));
             }
         }
     }

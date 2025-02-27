@@ -1,8 +1,5 @@
 package controller;
 
-import generator.Syllable;
-import generator.WordGenerator;
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,13 +10,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import model.Syllable;
+import model.SyllableManager;
+import model.WordGenerator;
+import model.WordManager;
 import view.Observator;
 
 import java.io.File;
@@ -29,11 +29,13 @@ import java.util.Optional;
 
 public class ControllerWordGenerator implements Observator {
 
+    private final WordManager wordManager = new WordManager();
     private final WordGenerator wordGenerator;
+    private final SyllableManager syllableManager = new SyllableManager();
     @FXML
     private TextField textFieldModel;
-    @FXML
-    private TextField textFieldNumberOfWords;
+
+    private int numberOfWords = 50;
     @FXML
     private Text textVerifyModel;
     @FXML
@@ -141,30 +143,8 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void generateModel()
     {
-        wordGenerator.detectionModel(textFieldModel.getText());
         listGeneratedWords.clear();
-        for (String str: wordGenerator) {
-            listGeneratedWords.add(str);
-        }
-    }
-
-    @FXML
-    public void setNumberOfWords()
-    {
-        if(Integer.parseInt(textFieldNumberOfWords.getText()) > wordGenerator.getMaxAuthorizeWords())
-        {
-            Alert boiteDeDialogue = new Alert(Alert.AlertType.ERROR,"For safety, the number of generated words can't exceed "+ wordGenerator.getMaxAuthorizeWords()+".\nYou can change this setting in the menu.", ButtonType.OK);
-            boiteDeDialogue.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            PauseTransition pause = new PauseTransition(Duration.seconds(15));
-            pause.setOnFinished(evenement -> { Button bouton = (Button) boiteDeDialogue.getDialogPane().lookupButton((ButtonType.OK));
-                bouton.fire();});
-            pause.play();
-            boiteDeDialogue.showAndWait();
-        }
-        else if(!textFieldNumberOfWords.getText().isBlank() && !textFieldNumberOfWords.getText().isEmpty())
-        {
-            wordGenerator.setNumberOfWords(Integer.parseInt(textFieldNumberOfWords.getText()));
-        }
+        listGeneratedWords.addAll(wordManager.generateWords(textFieldModel.getText(),numberOfWords));
     }
 
     /**
@@ -207,17 +187,6 @@ public class ControllerWordGenerator implements Observator {
                 actionModel("The model is correct.",false,Color.GREEN);
             }
         }
-        else if(wordGenerator.isAValidNumber(textFieldModel.getText()))
-        {
-            if(Integer.parseInt(textFieldModel.getText()) > wordGenerator.getMaxAuthorizeLetter())
-            {
-                actionModel("For safety, the number of letter can't exceed "+ wordGenerator.getMaxAuthorizeLetter()+".\nYou can change this setting in the menu.",true,Color.RED);
-            }
-            else
-            {
-                actionModel("The model is correct.",false,Color.GREEN);
-            }
-        }
         else if(letter == ' ')
         {
             actionModel("The model is correct.",false,Color.GREEN);
@@ -249,20 +218,16 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void checkSyllable()
     {
-        char letter = wordGenerator.modelIsCorrect(textFieldSyllable.getText());
+        char letter = syllableManager.validateModel(textFieldSyllable.getText());
         if(textFieldSyllable.getText().isEmpty() || textFieldSyllable.getText().isBlank())
         {
             actionSyllable("Write a model to begin.",true,Color.BLACK);
         }
-        else if(wordGenerator.syllableHasS(textFieldSyllable.getText()))
+        else if(letter == 'S' || letter == 'K' || letter == 'R' || letter == 'O')
         {
-            actionSyllable("The syllable can not contains S.",true,Color.RED);
+            actionSyllable("The syllable can't contains '"+letter+"'.",true,Color.RED);
         }
-        else if(letter >= 50 && letter <= 57)
-        {
-            actionSyllable("The number '"+letter+"' must be followed by a letter.",true,Color.RED);
-        }
-        else if(letter != ' ')
+        else if(letter != '1')
         {
             actionSyllable("The character '"+letter+"' is not allowed in syllable.",true,Color.RED);
         }
@@ -343,8 +308,7 @@ public class ControllerWordGenerator implements Observator {
     private void refreshListViewSyllables()
     {
         listSyllables.clear();
-        for (Iterator<Syllable> it = wordGenerator.iteratorSyllables(); it.hasNext(); ) {
-            Syllable sy = it.next();
+        for (Syllable sy : syllableManager) {
             listSyllables.add(sy.toString());
         }
     }
@@ -426,7 +390,7 @@ public class ControllerWordGenerator implements Observator {
         File path = fileChooser.showOpenDialog(stage);
         if(path != null)
         {
-            wordGenerator.selectOutuputFile(path);
+            wordGenerator.selectOutputFile(path);
         }
     }
 

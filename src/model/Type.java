@@ -1,4 +1,4 @@
-package generator;
+package model;
 
 import java.io.*;
 import java.util.Random;
@@ -23,7 +23,7 @@ public class Type {
             this.syllables = new Syllable[syll.length];
             for (int i = 0; i < syllables.length; i++)
             {
-                this.syllables[i] = new Syllable(syll[i]);
+                //this.syllables[i] = new Syllable(syll[i]);
             }
 
             //Model
