@@ -2,7 +2,7 @@ package model;
 
 public class SymbolDeterminer {
     private static final LettersManager lettersManager = new LettersManager();
-    private static final SyllableManager syllableManager = new SyllableManager();
+    private static final SyllableManager syllableManager = SyllableManager.getInstance();
     private static final String consonants = "zrRtpmlkKjhgfdsqwxcCvbn";
     private static final String vowels = "aeioOuyVK";
 
@@ -36,4 +36,5 @@ public class SymbolDeterminer {
         }
         return false;
     }
+
 }

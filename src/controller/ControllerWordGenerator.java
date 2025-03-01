@@ -20,6 +20,8 @@ import model.Syllable;
 import model.SyllableManager;
 import model.WordGenerator;
 import model.WordManager;
+import model.exception.IllegalSymbolModelException;
+import model.exception.NoSyllableCreatedException;
 import view.Observator;
 
 import java.io.File;
@@ -31,7 +33,7 @@ public class ControllerWordGenerator implements Observator {
 
     private final WordManager wordManager = new WordManager();
     private final WordGenerator wordGenerator;
-    private final SyllableManager syllableManager = new SyllableManager();
+    private final SyllableManager syllableManager = SyllableManager.getInstance();
     @FXML
     private TextField textFieldModel;
 
@@ -161,46 +163,20 @@ public class ControllerWordGenerator implements Observator {
     }
 
     @FXML
-    public void checkModel()
-    {
-        char letter = (wordGenerator.modelIsCorrect(textFieldModel.getText()));
-        if(textFieldModel.getText().isEmpty() || textFieldModel.getText().isBlank())
-        {
-            actionModel("Write a model to begin.",true,Color.BLACK);
-        }
-        else if(letter == 'S')
-        {
-            actionModel("You need to create at least one syllable to use S.",true,Color.RED);
-        }
-        else if(letter == '/')
-        {
-            actionModel("The character '/' can only be placed after S.",true,Color.RED);
-        }
-        else if(wordGenerator.syllableVowelRequested(textFieldModel.getText()))
-        {
-            if(!wordGenerator.syllablesHasVowels())
-            {
-                actionModel("You need to create at least one syllable that contains a vowel to use S/.",true,Color.RED);
+    public void checkModel() {
+        try {
+            wordManager.validateModel(textFieldModel.getText());
+            if (textFieldModel.getText().isEmpty()) {
+                actionModel("Ecrivez un modèle pour débuter.", true, Color.BLACK);
+            } else {
+                actionModel("Le modèle est correct.", false, Color.GREEN);
             }
-            else
-            {
-                actionModel("The model is correct.",false,Color.GREEN);
-            }
-        }
-        else if(letter == ' ')
-        {
-            actionModel("The model is correct.",false,Color.GREEN);
-        }
-        //If the letter is empty, there is no problem
-        else if(letter >= 50 && letter <= 57)
-        {
-            actionModel("The number '"+letter+"' must be followed by a letter.",true,Color.RED);
-        }
-        else
-        {
-            actionModel("The character '"+letter+"' is not allowed in the model.",true,Color.RED);
+
+        } catch (IllegalSymbolModelException | NoSyllableCreatedException e) {
+            actionModel(e.toString(), true, Color.RED);
         }
     }
+
 
     /**
      * Modify the state of the button create and the verification text
@@ -218,6 +194,7 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void checkSyllable()
     {
+        //TODO à changer pour des exceptions
         char letter = syllableManager.validateModel(textFieldSyllable.getText());
         if(textFieldSyllable.getText().isEmpty() || textFieldSyllable.getText().isBlank())
         {
@@ -299,7 +276,7 @@ public class ControllerWordGenerator implements Observator {
     @FXML
     public void addSyllable()
     {
-        wordGenerator.addSyllable(textFieldSyllable.getText());
+        syllableManager.addSyllable(textFieldSyllable.getText());
         textFieldSyllable.setText("");
         refreshListViewSyllables();
         checkModel();
@@ -309,14 +286,14 @@ public class ControllerWordGenerator implements Observator {
     {
         listSyllables.clear();
         for (Syllable sy : syllableManager) {
-            listSyllables.add(sy.toString());
+            listSyllables.add(sy.getModel());
         }
     }
 
     @FXML
     public void deleteSyllable()
     {
-        wordGenerator.deleteSyllable(listViewSyllables.getSelectionModel().getSelectedIndices().get(0));
+        syllableManager.deleteSyllable(listViewSyllables.getSelectionModel().getSelectedItem());
         refreshListViewSyllables();
         checkModel();
     }
